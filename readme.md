@@ -110,7 +110,7 @@ Stack of message (`string?`).
 
 ##### Custom properties
 
-It’s OK to store custom data directly on the `VFileMessage`, some of those are
+It’s OK to store custom data directly on the `VMessage`, some of those are
 handled by [utilities][util].
 
 ###### `file`
