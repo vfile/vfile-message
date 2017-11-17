@@ -127,6 +127,13 @@ You may add a `note` property with a long form description of the message
 
 You may add a `url` property with a link to documentation for the message.
 
+## Contribute
+
+See [`contribute.md` in `vfile/vfile`][contribute] for ways to get started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -156,6 +163,10 @@ You may add a `url` property with a link to documentation for the message.
 [point]: https://github.com/syntax-tree/unist#point
 
 [vfile]: https://github.com/vfile/vfile
+
+[contribute]: https://github.com/vfile/vfile/blob/master/contributing.md
+
+[coc]: https://github.com/vfile/vfile/blob/master/code-of-conduct.md
 
 [util]: https://github.com/vfile/vfile#utilities
 
