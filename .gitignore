@@ -5,3 +5,4 @@ coverage/
 node_modules/
 vfile-message.js
 vfile-message.min.js
+yarn.lock
