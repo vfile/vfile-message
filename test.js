@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var VMessage = require('./');
+var VMessage = require('.');
 
 /* eslint-disable no-undef */
 var exception;
