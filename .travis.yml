@@ -4,21 +4,13 @@ node_js:
 - '9.0'
 after_script: bash <(curl -s https://codecov.io/bash)
 deploy:
-  - provider: npm
-    skip_cleanup: true
-    email: tituswormer@gmail.com
-    api_key:
-      secure: ZIgcpijdFIN+WGqKZZmrP1Qwp1mLkTfIn43S5Iml5QIDPqDli/HoU0/hvjGAMhpVTlxQRULXYOBVXw6sXy/hkcjjbqkmFEU7KjdcEzbMheIk2WpGhxHByhCarSJoU7XO/HcYWdkhDAcVQfzZNjgdz5JVukoTEc6g8vxPHvhQyUpqLRhezSw/dDBQiCCp++wVmcXPxOZmLC9OwBAyQ8kx703G1XMhN1us71T1Vh2eDlVF93dyndjT4SjmjaEd8zcSkd8JuZWu21PQslLTsGoUFVQfj5I3apfEGWiJrMsW3ZccaIgpOFm6zXFDNCas8Omz2RaOHWU1MZ0so3sVzc4Jfon6MTNjt8GWGwmPhlXxGBUaLkxmppGGYxAaBRQsLp1yodHpBbfXax8tVgLu09/TAEVLK1Ac/oALl7jK86Bd9guix+WuhnzMQC6f+zqlILp2DS8V6pVIAniJ30c7gshwrJ3lfKrGdrY5SU0/MZQdZdZVBZkiZL6gRUaBM2vifLxCfqLAlE6r3dW50rtRXoeQtRSwM+SZWWOtkC8Np11HgDq7k8EQoWaF5/PpUp1n9rLduK13w7AI0DO3M1Rdezqa1lw+apqBqU5t+aZDV9tpWd4KZhLtez654pSYAvhAf2TuOFgZ+yL1aj/0Zouxg2+Lj8iSmYh271lBRDzcElcCBQA=
-    on:
-      tags: true
-      node: '9.0'
-  - provider: releases
-    skip_cleanup: true
-    api_key:
-      secure: MZ3VAR6cYWYqwF0Vz454Q8pniigTshgmvM/eKBPMqhHPSdHcxOX77828qGgO0DZFIXKlKKRwArDKVnBLfliC5z84h30adf7PozQ0JJQIrjV7pMWi9AoJW7SuguVXwIkXOiYOP++HSPDuZFxa/YpZBLJBER9WLauL4ox12f081YwAfRm/qrNOF5iOeyU8gk0i46nLC512dWhEa3vTQmL5YZotNUdRRxM0QxB5eYXgZBK6u48+ifZPoYGdQMyKq1GnR1d7B7qxP7+BCY0iIvJA0Kb1HWhsq5t6TOdTGtyDbD/ms7eqUooh7I7yIoKy6nofDVJ2P0D7AU8sbHSm4BMj6U5J9z8MxGCHXQ93G3NnqRJzzcdaog1WJy0HB8m8ZoeAYdugWgdx/+lESnvvMrzIToBl77JMXBgk3JeEdLLV2kHwBZForZ5e+yuKYVu5XcTllJ6N4UrfcZtmS22mwQMrt678hfOFf6y3bPZ+2uVpI+Wsb3H5fEdTS5LeKK1ez36vdSKl9hHFVxv9j1wRrcWhSy5b2hYWK7y+GkWZfxR+PhfvM6wMTJvwm7UC0VIHPXmAFZ5GDVtYeKAeW3vLRHLA7uSOld0BQIRS/7dPwhl9NVPM/lL0nJM4OUr7ZxYmmuilyvrCJgQL5YEvTPIvkCLQ9c8R4fTBqzdxED6rR+AZVus=
-    file:
-      - "vfile-message.js"
-      - "vfile-message.min.js"
-    on:
-      tags: true
-      node: '9.0'
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: MZ3VAR6cYWYqwF0Vz454Q8pniigTshgmvM/eKBPMqhHPSdHcxOX77828qGgO0DZFIXKlKKRwArDKVnBLfliC5z84h30adf7PozQ0JJQIrjV7pMWi9AoJW7SuguVXwIkXOiYOP++HSPDuZFxa/YpZBLJBER9WLauL4ox12f081YwAfRm/qrNOF5iOeyU8gk0i46nLC512dWhEa3vTQmL5YZotNUdRRxM0QxB5eYXgZBK6u48+ifZPoYGdQMyKq1GnR1d7B7qxP7+BCY0iIvJA0Kb1HWhsq5t6TOdTGtyDbD/ms7eqUooh7I7yIoKy6nofDVJ2P0D7AU8sbHSm4BMj6U5J9z8MxGCHXQ93G3NnqRJzzcdaog1WJy0HB8m8ZoeAYdugWgdx/+lESnvvMrzIToBl77JMXBgk3JeEdLLV2kHwBZForZ5e+yuKYVu5XcTllJ6N4UrfcZtmS22mwQMrt678hfOFf6y3bPZ+2uVpI+Wsb3H5fEdTS5LeKK1ez36vdSKl9hHFVxv9j1wRrcWhSy5b2hYWK7y+GkWZfxR+PhfvM6wMTJvwm7UC0VIHPXmAFZ5GDVtYeKAeW3vLRHLA7uSOld0BQIRS/7dPwhl9NVPM/lL0nJM4OUr7ZxYmmuilyvrCJgQL5YEvTPIvkCLQ9c8R4fTBqzdxED6rR+AZVus=
+  file:
+    - "vfile-message.js"
+    - "vfile-message.min.js"
+  on:
+    tags: true
+    node: '9.0'
