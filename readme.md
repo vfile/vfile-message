@@ -13,11 +13,15 @@ npm install vfile-message
 ## Usage
 
 ```js
-var VMessage = require('vfile-message');
+var VMessage = require('vfile-message')
 
-var message = new VMessage('`braavo` is misspelt; did you mean `bravo`?', {line: 1, column: 8}, 'spell:typo');
+var message = new VMessage(
+  '`braavo` is misspelt; did you mean `bravo`?',
+  {line: 1, column: 8},
+  'spell:typo'
+)
 
-console.log(message);
+console.log(message)
 ```
 
 Yields:
