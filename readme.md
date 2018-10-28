@@ -156,7 +156,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [license]: license
 
-[author]: http://wooorm.com
+[author]: https://wooorm.com
 
 [error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 
