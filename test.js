@@ -1,5 +1,6 @@
 'use strict'
 
+var sep = require('path').sep
 var test = require('tape')
 var VMessage = require('.')
 
@@ -168,7 +169,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
 
 function cleanStack(stack, max) {
   return stack
-    .replace(/\(\/.+\//g, '(')
+    .replace(new RegExp('\\(.+\\' + sep, 'g'), '(')
     .replace(/\d+:\d+/g, '1:1')
     .split('\n')
     .slice(0, max)
