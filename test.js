@@ -74,10 +74,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
       .split('\n')
       .slice(0, 2)
       .join('\n'),
-    [
-      'ReferenceError: variable is not defined',
-      '    at Object.<anonymous> (test.js:1:1)'
-    ].join('\n'),
+    'ReferenceError: variable is not defined\n    at Object.<anonymous> (test.js:1:1)',
     'should accept an error (2)'
   )
 
@@ -90,9 +87,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
       .split('\n')
       .slice(0, 2)
       .join('\n'),
-    ['ReferenceError: foo', '    at Object.<anonymous> (test.js:1:1)'].join(
-      '\n'
-    ),
+    'ReferenceError: foo\n    at Object.<anonymous> (test.js:1:1)',
     'should accept a changed error (2)'
   )
 
@@ -109,12 +104,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
       .split('\n')
       .slice(0, 4)
       .join('\n'),
-    [
-      'ReferenceError: foo',
-      'bar',
-      'baz',
-      '    at Object.<anonymous> (test.js:1:1)'
-    ].join('\n'),
+    'ReferenceError: foo\nbar\nbaz\n    at Object.<anonymous> (test.js:1:1)',
     'should accept a multiline error (2)'
   )
 
