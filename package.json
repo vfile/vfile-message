@@ -1,11 +1,15 @@
 {
   "name": "vfile-message",
   "version": "2.0.2",
-  "description": "Create a virtual message",
+  "description": "vfile utility to create a virtual message",
   "license": "MIT",
   "keywords": [
     "vfile",
+    "vfile-util",
+    "util",
+    "utility",
     "virtual",
+    "file",
     "message"
   ],
   "repository": "vfile/vfile-message",
