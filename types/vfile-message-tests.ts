@@ -21,6 +21,8 @@ vfileMessage('Error!', {
 })
 vfileMessage('Error!', undefined, 'test')
 
+new vfileMessage('Error!') // $ExpectType VFileMessage
+
 message.file = ''
 message.name = ''
 message.reason = ''
