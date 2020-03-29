@@ -1,15 +1,19 @@
 'use strict'
 
-var sep = require('path').sep
-var test = require('tape')
-var VMessage = require('.')
+const sep = require('path').sep
+const test = require('tape')
+const VMessage = require('.')
+
+/** @type {Error} */
+let exception
+/** @type {Error} */
+let changedMessage
+/** @type {Error} */
+let multilineException
 
 /* eslint-disable no-undef */
-var exception
-var changedMessage
-var multilineException
-
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.stack = cleanStack(error.stack, 3)
@@ -17,6 +21,7 @@ try {
 }
 
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.message = 'foo'
@@ -25,6 +30,7 @@ try {
 }
 
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.message = 'foo\nbar\nbaz'
@@ -34,12 +40,9 @@ try {
 /* eslint-enable no-undef */
 
 test('VMessage(reason[, position][, origin])', function(t) {
-  var message
-  var pos
-
   t.ok(new VMessage('') instanceof Error, 'should return an Error')
 
-  message = new VMessage('Foo')
+  let message = new VMessage('Foo')
 
   t.equal(message.name, '1:1')
   t.equal(message.file, '')
@@ -108,31 +111,32 @@ test('VMessage(reason[, position][, origin])', function(t) {
     'should accept a multiline error (2)'
   )
 
-  pos = {
+  const node = {
+    type: 'example',
     position: {
       start: {line: 2, column: 3},
       end: {line: 2, column: 5}
     }
   }
 
-  message = new VMessage('test', pos)
+  message = new VMessage('test', node)
 
-  t.deepEqual(message.location, pos.position, 'should accept a node (1)')
+  t.deepEqual(message.location, node.position, 'should accept a node (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
 
-  pos = pos.position
-  message = new VMessage('test', pos)
+  const {position} = node
+  message = new VMessage('test', position)
 
-  t.deepEqual(message.location, pos, 'should accept a location (1)')
+  t.deepEqual(message.location, position, 'should accept a location (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a location (2)')
 
-  pos = pos.start
-  message = new VMessage('test', pos)
+  const {start: point} = position
+  message = new VMessage('test', point)
 
   t.deepEqual(
     message.location,
     {
-      start: pos,
+      start: point,
       end: {line: null, column: null}
     },
     'should accept a position (1)'
@@ -157,6 +161,12 @@ test('VMessage(reason[, position][, origin])', function(t) {
   t.end()
 })
 
+/**
+ *
+ * @param {string} stack
+ * @param {number} max
+ * @returns {string}
+ */
 function cleanStack(stack, max) {
   return stack
     .replace(new RegExp('\\(.+\\' + sep, 'g'), '(')

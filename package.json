@@ -22,16 +22,16 @@
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
-  "types": "types/index.d.ts",
   "files": [
-    "types/index.d.ts",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "dependencies": {
     "@types/unist": "^2.0.0",
     "unist-util-stringify-position": "^2.0.0"
   },
   "devDependencies": {
+    "@types/tape": "^4.2.34",
     "browserify": "^16.0.0",
     "dtslint": "^3.0.0",
     "nyc": "^15.0.0",
@@ -49,7 +49,7 @@
     "build": "npm run build-bundle && npm run build-mangle",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test.js",
-    "test-types": "dtslint types",
+    "test-types": "rimraf \"*.d.ts\" && tsc",
     "test": "npm run format && npm run build && npm run test-coverage && npm run test-types"
   },
   "nyc": {

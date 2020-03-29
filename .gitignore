@@ -6,3 +6,4 @@ node_modules/
 vfile-message.js
 vfile-message.min.js
 yarn.lock
+test.d.ts
