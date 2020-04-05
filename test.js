@@ -39,7 +39,7 @@ try {
 }
 /* eslint-enable no-undef */
 
-test('VMessage(reason[, position][, origin])', function(t) {
+test('VMessage(reason[, position][, origin])', function (t) {
   t.ok(new VMessage('') instanceof Error, 'should return an Error')
 
   let message = new VMessage('Foo')
@@ -73,10 +73,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
   )
 
   t.equal(
-    message.stack
-      .split('\n')
-      .slice(0, 2)
-      .join('\n'),
+    message.stack.split('\n').slice(0, 2).join('\n'),
     'ReferenceError: variable is not defined\n    at Object.<anonymous> (test.js:1:1)',
     'should accept an error (2)'
   )
@@ -86,10 +83,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
   t.equal(message.message, 'foo', 'should accept a changed error (1)')
 
   t.equal(
-    message.stack
-      .split('\n')
-      .slice(0, 2)
-      .join('\n'),
+    message.stack.split('\n').slice(0, 2).join('\n'),
     'ReferenceError: foo\n    at Object.<anonymous> (test.js:1:1)',
     'should accept a changed error (2)'
   )
@@ -103,10 +97,7 @@ test('VMessage(reason[, position][, origin])', function(t) {
   )
 
   t.equal(
-    message.stack
-      .split('\n')
-      .slice(0, 4)
-      .join('\n'),
+    message.stack.split('\n').slice(0, 4).join('\n'),
     'ReferenceError: foo\nbar\nbaz\n    at Object.<anonymous> (test.js:1:1)',
     'should accept a multiline error (2)'
   )
