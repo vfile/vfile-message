@@ -1,3 +1,5 @@
 coverage/
 vfile-message.js
 vfile-message.min.js
+*.json
+*.md
