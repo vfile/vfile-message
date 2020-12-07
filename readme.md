@@ -110,7 +110,7 @@ Has `start` and `end` properties, both set to an object with `line` and
 
 ###### `source`
 
-Namespace of warning (`string?`).
+Namespace of message (`string?`).
 
 ###### `ruleId`
 
