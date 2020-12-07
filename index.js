@@ -10,16 +10,14 @@ VMessagePrototype.prototype = Error.prototype
 VMessage.prototype = new VMessagePrototype()
 
 // Message properties.
-var proto = VMessage.prototype
-
-proto.file = ''
-proto.name = ''
-proto.reason = ''
-proto.message = ''
-proto.stack = ''
-proto.fatal = null
-proto.column = null
-proto.line = null
+VMessage.prototype.file = ''
+VMessage.prototype.name = ''
+VMessage.prototype.reason = ''
+VMessage.prototype.message = ''
+VMessage.prototype.stack = ''
+VMessage.prototype.fatal = null
+VMessage.prototype.column = null
+VMessage.prototype.line = null
 
 // Construct a new VMessage.
 //
@@ -27,7 +25,8 @@ proto.line = null
 // `line` and `column` attributes on Safari 9, thus throwing and failing the
 // data.
 function VMessage(reason, position, origin) {
-  var parts
+  var parts = []
+  var index
   var range
   var location
 
@@ -36,7 +35,17 @@ function VMessage(reason, position, origin) {
     position = null
   }
 
-  parts = parseOrigin(origin)
+  if (typeof origin === 'string') {
+    index = origin.indexOf(':')
+
+    if (index === -1) {
+      parts[1] = origin
+    } else {
+      parts[0] = origin.slice(0, index)
+      parts[1] = origin.slice(index + 1)
+    }
+  }
+
   range = stringify(position) || '1:1'
 
   location = {
@@ -60,35 +69,12 @@ function VMessage(reason, position, origin) {
     }
   }
 
-  if (reason.stack) {
-    this.stack = reason.stack
-    reason = reason.message
-  }
-
-  this.message = reason
   this.name = range
-  this.reason = reason
-  this.line = position ? position.line : null
+  this.message = this.reason = reason.message || reason
+  this.stack = reason.stack || ''
   this.column = position ? position.column : null
+  this.line = position ? position.line : null
   this.location = location
-  this.source = parts[0]
-  this.ruleId = parts[1]
-}
-
-function parseOrigin(origin) {
-  var result = [null, null]
-  var index
-
-  if (typeof origin === 'string') {
-    index = origin.indexOf(':')
-
-    if (index === -1) {
-      result[1] = origin
-    } else {
-      result[0] = origin.slice(0, index)
-      result[1] = origin.slice(index + 1)
-    }
-  }
-
-  return result
+  this.source = parts[0] || null
+  this.ruleId = parts[1] || null
 }

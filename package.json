@@ -70,10 +70,11 @@
     "prettier": true,
     "esnext": false,
     "rules": {
-      "@typescript-eslint/member-ordering": "off"
+      "@typescript-eslint/member-ordering": "off",
+      "no-multi-assign": "off"
     },
     "ignores": [
-      "types",
+      "types/",
       "vfile-message.js"
     ]
   },
