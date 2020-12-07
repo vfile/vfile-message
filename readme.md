@@ -155,9 +155,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/vfile/vfile-message.svg
+[build-badge]: https://github.com/vfile/vfile-message/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/vfile/vfile-message
+[build]: https://github.com/vfile/vfile-message/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/vfile/vfile-message.svg
 
