@@ -12,6 +12,9 @@ Create [vfile][] messages.
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```bash
@@ -21,9 +24,9 @@ npm install vfile-message
 ## Use
 
 ```js
-var VMessage = require('vfile-message')
+import {VFileMessage} from 'vfile-message'
 
-var message = new VMessage(
+var message = new VFileMessage(
   '`braavo` is misspelt; did you mean `bravo`?',
   {line: 1, column: 8},
   'spell:typo'
@@ -49,7 +52,10 @@ Yields:
 
 ## API
 
-### `VMessage(reason[, position][, origin])`
+This package exports the following identifiers: `VFileMessage`.
+There is no default export.
+
+### `VFileMessage(reason[, position][, origin])`
 
 Constructor of a message for `reason` at `position` from `origin`.
 When an error is passed in as `reason`, copies the stack.
@@ -122,7 +128,7 @@ Stack of message (`string?`).
 
 ##### Custom properties
 
-It’s OK to store custom data directly on the `VMessage`, some of those are
+It’s OK to store custom data directly on the `VFileMessage`, some of those are
 handled by [utilities][util].
 
 ###### `file`

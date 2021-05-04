@@ -87,7 +87,7 @@ declare namespace vfileMessage {
     url?: string
 
     /**
-     * It’s OK to store custom data directly on the VMessage, some of those are handled by utilities.
+     * It’s OK to store custom data directly on the message, some of those are handled by utilities.
      */
     [key: string]: unknown
   }

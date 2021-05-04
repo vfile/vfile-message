@@ -1,30 +1,26 @@
-'use strict'
-
-var stringify = require('unist-util-stringify-position')
-
-module.exports = VMessage
+import {stringifyPosition} from 'unist-util-stringify-position'
 
 // Inherit from `Error#`.
-function VMessagePrototype() {}
-VMessagePrototype.prototype = Error.prototype
-VMessage.prototype = new VMessagePrototype()
+function VFileMessagePrototype() {}
+VFileMessagePrototype.prototype = Error.prototype
+VFileMessage.prototype = new VFileMessagePrototype()
 
 // Message properties.
-VMessage.prototype.file = ''
-VMessage.prototype.name = ''
-VMessage.prototype.reason = ''
-VMessage.prototype.message = ''
-VMessage.prototype.stack = ''
-VMessage.prototype.fatal = null
-VMessage.prototype.column = null
-VMessage.prototype.line = null
+VFileMessage.prototype.file = ''
+VFileMessage.prototype.name = ''
+VFileMessage.prototype.reason = ''
+VFileMessage.prototype.message = ''
+VFileMessage.prototype.stack = ''
+VFileMessage.prototype.fatal = null
+VFileMessage.prototype.column = null
+VFileMessage.prototype.line = null
 
-// Construct a new VMessage.
+// Construct a new VFileMessage.
 //
 // Note: We cannot invoke `Error` on the created context, as that adds readonly
 // `line` and `column` attributes on Safari 9, thus throwing and failing the
 // data.
-function VMessage(reason, position, origin) {
+export function VFileMessage(reason, position, origin) {
   var parts = []
   var index
   var range
@@ -46,7 +42,7 @@ function VMessage(reason, position, origin) {
     }
   }
 
-  range = stringify(position) || '1:1'
+  range = stringifyPosition(position) || '1:1'
 
   location = {
     start: {line: null, column: null},
@@ -70,7 +66,8 @@ function VMessage(reason, position, origin) {
   }
 
   this.name = range
-  this.message = this.reason = reason.message || reason
+  this.reason = reason.message || reason
+  this.message = this.reason
   this.stack = reason.stack || ''
   this.column = position ? position.column : null
   this.line = position ? position.line : null

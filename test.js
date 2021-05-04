@@ -1,8 +1,6 @@
-'use strict'
-
-var sep = require('path').sep
-var test = require('tape')
-var VMessage = require('.')
+import path from 'path'
+import test from 'tape'
+import {VFileMessage} from './index.js'
 
 /* eslint-disable no-undef */
 var exception
@@ -33,13 +31,13 @@ try {
 }
 /* eslint-enable no-undef */
 
-test('VMessage(reason[, position][, origin])', function (t) {
+test('VFileMessage(reason[, position][, origin])', function (t) {
   var message
   var pos
 
-  t.ok(new VMessage('') instanceof Error, 'should return an Error')
+  t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 
-  message = new VMessage('Foo')
+  message = new VFileMessage('Foo')
 
   t.equal(message.name, '1:1')
   t.equal(message.file, '')
@@ -61,7 +59,7 @@ test('VMessage(reason[, position][, origin])', function (t) {
     'should have a pretty `toString()` message'
   )
 
-  message = new VMessage(exception)
+  message = new VFileMessage(exception)
 
   t.equal(
     message.message,
@@ -70,22 +68,22 @@ test('VMessage(reason[, position][, origin])', function (t) {
   )
 
   t.equal(
-    message.stack.split('\n').slice(0, 2).join('\n'),
-    'ReferenceError: variable is not defined\n    at Object.<anonymous> (test.js:1:1)',
+    message.stack.split('\n')[0],
+    'ReferenceError: variable is not defined',
     'should accept an error (2)'
   )
 
-  message = new VMessage(changedMessage)
+  message = new VFileMessage(changedMessage)
 
   t.equal(message.message, 'foo', 'should accept a changed error (1)')
 
   t.equal(
-    message.stack.split('\n').slice(0, 2).join('\n'),
-    'ReferenceError: foo\n    at Object.<anonymous> (test.js:1:1)',
+    message.stack.split('\n')[0],
+    'ReferenceError: foo',
     'should accept a changed error (2)'
   )
 
-  message = new VMessage(multilineException)
+  message = new VFileMessage(multilineException)
 
   t.equal(
     message.message,
@@ -94,8 +92,8 @@ test('VMessage(reason[, position][, origin])', function (t) {
   )
 
   t.equal(
-    message.stack.split('\n').slice(0, 4).join('\n'),
-    'ReferenceError: foo\nbar\nbaz\n    at Object.<anonymous> (test.js:1:1)',
+    message.stack.split('\n').slice(0, 3).join('\n'),
+    'ReferenceError: foo\nbar\nbaz',
     'should accept a multiline error (2)'
   )
 
@@ -106,19 +104,19 @@ test('VMessage(reason[, position][, origin])', function (t) {
     }
   }
 
-  message = new VMessage('test', pos)
+  message = new VFileMessage('test', pos)
 
   t.deepEqual(message.location, pos.position, 'should accept a node (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
 
   pos = pos.position
-  message = new VMessage('test', pos)
+  message = new VFileMessage('test', pos)
 
   t.deepEqual(message.location, pos, 'should accept a location (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a location (2)')
 
   pos = pos.start
-  message = new VMessage('test', pos)
+  message = new VFileMessage('test', pos)
 
   t.deepEqual(
     message.location,
@@ -132,12 +130,12 @@ test('VMessage(reason[, position][, origin])', function (t) {
   t.equal(String(message), '2:3: test', 'should accept a position')
 
   t.equal(
-    new VMessage('test', 'charlie').ruleId,
+    new VFileMessage('test', 'charlie').ruleId,
     'charlie',
     'should accept a `ruleId` as `origin`'
   )
 
-  message = new VMessage('test', 'delta:echo')
+  message = new VFileMessage('test', 'delta:echo')
 
   t.deepEqual(
     [message.source, message.ruleId],
@@ -150,7 +148,7 @@ test('VMessage(reason[, position][, origin])', function (t) {
 
 function cleanStack(stack, max) {
   return stack
-    .replace(new RegExp('\\(.+\\' + sep, 'g'), '(')
+    .replace(new RegExp('\\(.+\\' + path.sep, 'g'), '(')
     .replace(/\d+:\d+/g, '1:1')
     .split('\n')
     .slice(0, max)
