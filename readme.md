@@ -39,12 +39,12 @@ Yields:
 
 ```txt
 [1:8: `braavo` is misspelt; did you mean `bravo`?] {
-  position: {start: {line: 1, column: 8}, end: {line: null, column: null}},
   reason: '`braavo` is misspelt; did you mean `bravo`?',
-  column: 1,
-  line: 8,
+  line: 1,
+  column: 8,
   source: 'spell',
-  ruleId: 'typo'
+  ruleId: 'typo',
+  position: {start: {line: 1, column: 8}, end: {line: null, column: null}}
 }
 ```
 

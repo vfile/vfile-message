@@ -67,26 +67,20 @@ export class VFileMessage extends Error {
     this.stack = typeof reason === 'object' ? reason.stack : ''
 
     /**
-     * Full range information, when available.
-     * Has start and end properties, both set to an object with line and column, set to number?.
-     * @type {Position?}
-     */
-    this.position = position
-    /**
      * Reason for message.
      * @type {string}
      */
     this.reason = this.message
     /**
-     * Starting column of error.
-     * @type {number?}
-     */
-    this.column = position.start.line
-    /**
      * Starting line of error.
      * @type {number?}
      */
-    this.line = position.start.column
+    this.line = position.start.line
+    /**
+     * Starting column of error.
+     * @type {number?}
+     */
+    this.column = position.start.column
     /**
      * Namespace of warning.
      * @type {string?}
@@ -97,6 +91,12 @@ export class VFileMessage extends Error {
      * @type {string?}
      */
     this.ruleId = parts[1]
+    /**
+     * Full range information, when available.
+     * Has start and end properties, both set to an object with line and column, set to number?.
+     * @type {Position?}
+     */
+    this.position = position
 
     // The following fields are “well known”.
     // Not standard.
