@@ -1,13 +1,23 @@
+/**
+ * @typedef {import('unist').Node} Node
+ * @typedef {import('unist').Position} Position
+ * @typedef {import('unist').Point} Point
+ */
+
 import path from 'path'
 import test from 'tape'
 import {VFileMessage} from './index.js'
 
 /* eslint-disable no-undef */
+/** @type {Error} */
 var exception
+/** @type {Error} */
 var changedMessage
+/** @type {Error} */
 var multilineException
 
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.stack = cleanStack(error.stack, 3)
@@ -15,6 +25,7 @@ try {
 }
 
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.message = 'foo'
@@ -23,6 +34,7 @@ try {
 }
 
 try {
+  // @ts-ignore
   variable = 1
 } catch (error) {
   error.message = 'foo\nbar\nbaz'
@@ -32,7 +44,9 @@ try {
 /* eslint-enable no-undef */
 
 test('VFileMessage(reason[, position][, origin])', function (t) {
+  /** @type {VFileMessage} */
   var message
+  /** @type {Node|Position|Point} */
   var pos
 
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
@@ -98,6 +112,7 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
   )
 
   pos = {
+    type: 'x',
     position: {
       start: {line: 2, column: 3},
       end: {line: 2, column: 5}
@@ -130,11 +145,13 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
   t.equal(String(message), '2:3: test', 'should accept a position')
 
   t.equal(
+    // @ts-ignore runtime supports an overload w/o position.
     new VFileMessage('test', 'charlie').ruleId,
     'charlie',
     'should accept a `ruleId` as `origin`'
   )
 
+  // @ts-ignore runtime supports an overload w/o position.
   message = new VFileMessage('test', 'delta:echo')
 
   t.deepEqual(
@@ -146,6 +163,11 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
   t.end()
 })
 
+/**
+ * @param {string} stack
+ * @param {number} max
+ * @returns {string}
+ */
 function cleanStack(stack, max) {
   return stack
     .replace(new RegExp('\\(.+\\' + path.sep, 'g'), '(')
