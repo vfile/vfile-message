@@ -37,17 +37,15 @@ console.log(message)
 
 Yields:
 
-```js
-{ [1:8: `braavo` is misspelt; did you mean `bravo`?]
+```txt
+[1:8: `braavo` is misspelt; did you mean `bravo`?] {
+  position: {start: {line: 1, column: 8}, end: {line: null, column: null}},
   reason: '`braavo` is misspelt; did you mean `bravo`?',
-  fatal: null,
-  line: 1,
-  column: 8,
-  location:
-   { start: { line: 1, column: 8 },
-     end: { line: null, column: null } },
+  column: 1,
+  line: 8,
   source: 'spell',
-  ruleId: 'typo' }
+  ruleId: 'typo'
+}
 ```
 
 ## API
@@ -55,9 +53,9 @@ Yields:
 This package exports the following identifiers: `VFileMessage`.
 There is no default export.
 
-### `VFileMessage(reason[, position][, origin])`
+### `VFileMessage(reason[, place][, origin])`
 
-Constructor of a message for `reason` at `position` from `origin`.
+Constructor of a message for `reason` at `place` from `origin`.
 When an error is passed in as `reason`, copies the stack.
 
 ##### Parameters
@@ -67,7 +65,7 @@ When an error is passed in as `reason`, copies the stack.
 Reason for message (`string` or `Error`).
 Uses the stack and message of the error if given.
 
-###### `position`
+###### `place`
 
 Place at which the message occurred in a file ([`Node`][node],
 [`Position`][position], or [`Point`][point], optional).
@@ -108,7 +106,7 @@ Starting line of error (`number?`).
 
 Starting column of error (`number?`).
 
-###### `location`
+###### `position`
 
 Full range information, when available ([`Position`][position]).
 Has `start` and `end` properties, both set to an object with `line` and

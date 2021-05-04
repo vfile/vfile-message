@@ -8,18 +8,18 @@ import {stringifyPosition} from 'unist-util-stringify-position'
 
 export class VFileMessage extends Error {
   /**
-   * Constructor of a message for `reason` at `position` from `origin`.
+   * Constructor of a message for `reason` at `place` from `origin`.
    * When an error is passed in as `reason`, copies the `stack`.
    *
    * @param {string|Error} reason Reason for message (`string` or `Error`). Uses the stack and message of the error if given.
-   * @param {Node|Position|Point} [position] Place at which the message occurred in a file (`Node`, `Position`, or `Point`, optional).
+   * @param {Node|Position|Point} [place] Place at which the message occurred in a file (`Node`, `Position`, or `Point`, optional).
    * @param {string} [origin] Place in code the message originates from (`string`, optional).
    */
-  constructor(reason, position, origin) {
+  constructor(reason, place, origin) {
     /** @type {[string?, string?]} */
     var parts = [null, null]
     /** @type {Position} */
-    var location = {
+    var position = {
       start: {line: null, column: null},
       end: {line: null, column: null}
     }
@@ -28,9 +28,9 @@ export class VFileMessage extends Error {
 
     super()
 
-    if (typeof position === 'string') {
-      origin = position
-      position = null
+    if (typeof place === 'string') {
+      origin = place
+      place = null
     }
 
     if (typeof origin === 'string') {
@@ -44,25 +44,25 @@ export class VFileMessage extends Error {
       }
     }
 
-    if (position) {
+    if (place) {
       // Node.
-      if ('type' in position || 'position' in position) {
-        location = position.position
+      if ('type' in place || 'position' in place) {
+        position = place.position
       }
       // Position.
-      else if ('start' in position) {
+      else if ('start' in place) {
         // @ts-ignore Looks like a position.
-        location = position
+        position = place
       }
       // Point.
-      else if ('line' in position) {
+      else if ('line' in place) {
         // @ts-ignore Looks like a point.
-        location.start = position
+        position.start = place
       }
     }
 
     // Fields from `Error`
-    this.name = stringifyPosition(position) || '1:1'
+    this.name = stringifyPosition(place) || '1:1'
     this.message = typeof reason === 'object' ? reason.message : reason
     this.stack = typeof reason === 'object' ? reason.stack : ''
 
@@ -71,7 +71,7 @@ export class VFileMessage extends Error {
      * Has start and end properties, both set to an object with line and column, set to number?.
      * @type {Position?}
      */
-    this.location = location
+    this.position = position
     /**
      * Reason for message.
      * @type {string}
@@ -81,12 +81,12 @@ export class VFileMessage extends Error {
      * Starting column of error.
      * @type {number?}
      */
-    this.column = location.start.line
+    this.column = position.start.line
     /**
      * Starting line of error.
      * @type {number?}
      */
-    this.line = location.start.column
+    this.line = position.start.column
     /**
      * Namespace of warning.
      * @type {string?}
@@ -137,4 +137,4 @@ VFileMessage.prototype.column = null
 VFileMessage.prototype.line = null
 VFileMessage.prototype.source = null
 VFileMessage.prototype.ruleId = null
-VFileMessage.prototype.location = null
+VFileMessage.prototype.position = null

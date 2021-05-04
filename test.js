@@ -43,11 +43,11 @@ try {
 }
 /* eslint-enable no-undef */
 
-test('VFileMessage(reason[, position][, origin])', function (t) {
+test('VFileMessage(reason[, place][, origin])', function (t) {
   /** @type {VFileMessage} */
   var message
   /** @type {Node|Position|Point} */
-  var pos
+  var place
 
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 
@@ -62,7 +62,7 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
   t.equal(message.fatal, null)
   t.equal(message.line, null)
   t.equal(message.column, null)
-  t.deepEqual(message.location, {
+  t.deepEqual(message.position, {
     start: {line: null, column: null},
     end: {line: null, column: null}
   })
@@ -111,7 +111,7 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
     'should accept a multiline error (2)'
   )
 
-  pos = {
+  place = {
     type: 'x',
     position: {
       start: {line: 2, column: 3},
@@ -119,24 +119,24 @@ test('VFileMessage(reason[, position][, origin])', function (t) {
     }
   }
 
-  message = new VFileMessage('test', pos)
+  message = new VFileMessage('test', place)
 
-  t.deepEqual(message.location, pos.position, 'should accept a node (1)')
+  t.deepEqual(message.position, place.position, 'should accept a node (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
 
-  pos = pos.position
-  message = new VFileMessage('test', pos)
+  place = place.position
+  message = new VFileMessage('test', place)
 
-  t.deepEqual(message.location, pos, 'should accept a location (1)')
-  t.equal(String(message), '2:3-2:5: test', 'should accept a location (2)')
+  t.deepEqual(message.position, place, 'should accept a position (1)')
+  t.equal(String(message), '2:3-2:5: test', 'should accept a position (2)')
 
-  pos = pos.start
-  message = new VFileMessage('test', pos)
+  place = place.start
+  message = new VFileMessage('test', place)
 
   t.deepEqual(
-    message.location,
+    message.position,
     {
-      start: pos,
+      start: place,
       end: {line: null, column: null}
     },
     'should accept a position (1)'
