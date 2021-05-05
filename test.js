@@ -145,6 +145,7 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
   t.equal(String(message), '2:3: test', 'should accept a position (4)')
 
   t.deepEqual(
+    // @ts-ignore
     new VFileMessage('test', {}).position,
     {start: {line: null, column: null}, end: {line: null, column: null}},
     'should ignore an empty object'
