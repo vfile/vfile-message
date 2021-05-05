@@ -50,12 +50,12 @@ export class VFileMessage extends Error {
         position = place.position
       }
       // Position.
-      else if ('start' in place) {
+      else if ('start' in place || 'end' in place) {
         // @ts-ignore Looks like a position.
         position = place
       }
       // Point.
-      else if ('line' in place) {
+      else if ('line' in place || 'column' in place) {
         // @ts-ignore Looks like a point.
         position.start = place
       }

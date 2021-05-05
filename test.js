@@ -139,10 +139,16 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
       start: place,
       end: {line: null, column: null}
     },
-    'should accept a position (1)'
+    'should accept a position (3)'
   )
 
-  t.equal(String(message), '2:3: test', 'should accept a position')
+  t.equal(String(message), '2:3: test', 'should accept a position (4)')
+
+  t.deepEqual(
+    new VFileMessage('test', {}).position,
+    {start: {line: null, column: null}, end: {line: null, column: null}},
+    'should ignore an empty object'
+  )
 
   t.equal(
     // @ts-ignore runtime supports an overload w/o position.
