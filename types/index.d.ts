@@ -6,7 +6,7 @@ declare namespace vfileMessage {
   /**
    * Create a virtual message.
    */
-  interface VFileMessage extends Error {
+  interface VFileMessage extends Omit<Error, 'location'> {
     /**
      * Constructor of a message for `reason` at `position` from `origin`.
      * When an error is passed in as `reason`, copies the `stack`.
