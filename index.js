@@ -47,7 +47,9 @@ export class VFileMessage extends Error {
     if (place) {
       // Node.
       if ('type' in place || 'position' in place) {
-        position = place.position
+        if (place.position) {
+          position = place.position
+        }
       }
       // Position.
       else if ('start' in place || 'end' in place) {

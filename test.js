@@ -123,6 +123,11 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
 
   t.deepEqual(message.position, place.position, 'should accept a node (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
+  t.equal(
+    String(new VFileMessage('test', {type: 'x'})),
+    '1:1-1:1: test',
+    'should accept a node (3)'
+  )
 
   place = place.position
   message = new VFileMessage('test', place)
