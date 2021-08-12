@@ -4,7 +4,7 @@
  * @typedef {import('unist').Point} Point
  */
 
-import path from 'path'
+import path from 'node:path'
 import test from 'tape'
 import {VFileMessage} from './index.js'
 
