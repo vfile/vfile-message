@@ -74,6 +74,11 @@ export class VFileMessage extends Error {
      */
     this.reason = this.message
     /**
+     * If true, marks associated file as no longer processable.
+     * @type {boolean?}
+     */
+    this.fatal
+    /**
      * Starting line of error.
      * @type {number?}
      */
@@ -110,11 +115,6 @@ export class VFileMessage extends Error {
      * @type {string?}
      */
     this.file
-    /**
-     * If true, marks associated file as no longer processable.
-     * @type {boolean?}
-     */
-    this.fatal
     /**
      * You may add a url property with a link to documentation for the message.
      * @type {string?}
