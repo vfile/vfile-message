@@ -77,6 +77,7 @@ export class VFileMessage extends Error {
      * If true, marks associated file as no longer processable.
      * @type {boolean?}
      */
+    // eslint-disable-next-line no-unused-expressions
     this.fatal
     /**
      * Starting line of error.
