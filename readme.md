@@ -129,6 +129,14 @@ Stack of message (`string?`).
 It’s OK to store custom data directly on the `VFileMessage`, some of those are
 handled by [utilities][util].
 
+###### `actual`
+
+You may use this to specify the actual value that’s being reported.
+
+###### `expected`
+
+You may use this to suggest expected values that should be used instead of `actual`.
+
 ###### `file`
 
 You may add a `file` property with a path of a file (used throughout the

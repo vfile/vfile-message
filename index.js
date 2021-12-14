@@ -106,6 +106,16 @@ export class VFileMessage extends Error {
 
     /* eslint-disable no-unused-expressions */
     /**
+     * You may use this to specify the actual value that’s being reported.
+     * @type {string?}
+     */
+    this.actual
+    /**
+     * You may use this to suggest expected values that should be used instead of `actual`.
+     * @type {string[]?}
+     */
+    this.expected
+    /**
      * You may add a file property with a path of a file (used throughout the VFile ecosystem).
      * @type {string?}
      */
