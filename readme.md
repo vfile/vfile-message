@@ -131,11 +131,13 @@ handled by [utilities][util].
 
 ###### `actual`
 
-You may use this to specify the actual value that’s being reported.
+You can use this to specify the source value that’s being reported, which is
+deemed incorrect.
 
 ###### `expected`
 
-You may use this to suggest expected values that should be used instead of `actual`.
+You can use this to suggest values that should be used instead of `actual`, one
+or more values that are deemed as acceptable.
 
 ###### `file`
 
