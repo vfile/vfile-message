@@ -112,7 +112,8 @@ export class VFileMessage extends Error {
      */
     this.actual
     /**
-     * You may use this to suggest expected values that should be used instead of `actual`.
+     * You can use this to suggest values that should be used instead of
+     * `actual`, one or more values that are deemed as acceptable.
      * @type {Array<string>?}
      */
     this.expected
