@@ -106,7 +106,8 @@ export class VFileMessage extends Error {
 
     /* eslint-disable no-unused-expressions */
     /**
-     * You may use this to specify the actual value that’s being reported.
+     * You can use this to specify the source value that’s being reported, which
+     * is deemed incorrect.
      * @type {string?}
      */
     this.actual
