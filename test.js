@@ -1,5 +1,5 @@
 /**
- * @typedef {import('unist').Node} Node
+ * @typedef {Record<string, unknown> & {type: string, position?: Position|undefined}} NodeLike
  * @typedef {import('unist').Position} Position
  * @typedef {import('unist').Point} Point
  */
@@ -46,7 +46,7 @@ try {
 test('VFileMessage(reason[, place][, origin])', function (t) {
   /** @type {VFileMessage} */
   var message
-  /** @type {Node|Position|Point} */
+  /** @type {NodeLike|Position|Point} */
   var place
 
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
