@@ -19,7 +19,8 @@ var multilineException
 try {
   // @ts-ignore
   variable = 1
-} catch (error) {
+} catch (error_) {
+  const error = /** @type {Error} */ (error_)
   error.stack = cleanStack(error.stack, 3)
   exception = error
 }
@@ -27,7 +28,8 @@ try {
 try {
   // @ts-ignore
   variable = 1
-} catch (error) {
+} catch (error_) {
+  const error = /** @type {Error} */ (error_)
   error.message = 'foo'
   error.stack = cleanStack(error.stack, 3)
   changedMessage = error
@@ -36,7 +38,8 @@ try {
 try {
   // @ts-ignore
   variable = 1
-} catch (error) {
+} catch (error_) {
+  const error = /** @type {Error} */ (error_)
   error.message = 'foo\nbar\nbaz'
   error.stack = cleanStack(error.stack, 5)
   multilineException = error
@@ -46,8 +49,6 @@ try {
 test('VFileMessage(reason[, place][, origin])', function (t) {
   /** @type {VFileMessage} */
   var message
-  /** @type {NodeLike|Position|Point} */
-  var place
 
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 
@@ -82,7 +83,7 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
   )
 
   t.equal(
-    message.stack.split('\n')[0],
+    String(message.stack || '').split('\n')[0],
     'ReferenceError: variable is not defined',
     'should accept an error (2)'
   )
@@ -92,7 +93,7 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
   t.equal(message.message, 'foo', 'should accept a changed error (1)')
 
   t.equal(
-    message.stack.split('\n')[0],
+    String(message.stack || '').split('\n')[0],
     'ReferenceError: foo',
     'should accept a changed error (2)'
   )
@@ -106,12 +107,15 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
   )
 
   t.equal(
-    message.stack.split('\n').slice(0, 3).join('\n'),
+    String(message.stack || '')
+      .split('\n')
+      .slice(0, 3)
+      .join('\n'),
     'ReferenceError: foo\nbar\nbaz',
     'should accept a multiline error (2)'
   )
 
-  place = {
+  const node = {
     type: 'x',
     position: {
       start: {line: 2, column: 3},
@@ -119,9 +123,9 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
     }
   }
 
-  message = new VFileMessage('test', place)
+  message = new VFileMessage('test', node)
 
-  t.deepEqual(message.position, place.position, 'should accept a node (1)')
+  t.deepEqual(message.position, node.position, 'should accept a node (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
   t.equal(
     String(new VFileMessage('test', {type: 'x'})),
@@ -129,19 +133,19 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
     'should accept a node (3)'
   )
 
-  place = place.position
-  message = new VFileMessage('test', place)
+  const position = node.position
+  message = new VFileMessage('test', position)
 
-  t.deepEqual(message.position, place, 'should accept a position (1)')
+  t.deepEqual(message.position, position, 'should accept a position (1)')
   t.equal(String(message), '2:3-2:5: test', 'should accept a position (2)')
 
-  place = place.start
-  message = new VFileMessage('test', place)
+  const point = position.start
+  message = new VFileMessage('test', point)
 
   t.deepEqual(
     message.position,
     {
-      start: place,
+      start: point,
       end: {line: null, column: null}
     },
     'should accept a position (3)'
@@ -176,12 +180,12 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
 })
 
 /**
- * @param {string} stack
+ * @param {string|undefined} stack
  * @param {number} max
  * @returns {string}
  */
 function cleanStack(stack, max) {
-  return stack
+  return String(stack || '')
     .replace(new RegExp('\\(.+\\' + path.sep, 'g'), '(')
     .replace(/\d+:\d+/g, '1:1')
     .split('\n')

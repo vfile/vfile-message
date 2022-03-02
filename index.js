@@ -16,11 +16,13 @@ export class VFileMessage extends Error {
    * @param {string} [origin] Place in code the message originates from (`string`, optional).
    */
   constructor(reason, place, origin) {
-    /** @type {[string?, string?]} */
+    /** @type {[string|null, string|null]} */
     var parts = [null, null]
     /** @type {Position} */
     var position = {
+      // @ts-expect-error: we always follows the structure of `position`.
       start: {line: null, column: null},
+      // @ts-expect-error: "
       end: {line: null, column: null}
     }
     /** @type {number} */
@@ -30,7 +32,7 @@ export class VFileMessage extends Error {
 
     if (typeof place === 'string') {
       origin = place
-      place = null
+      place = undefined
     }
 
     if (typeof origin === 'string') {
