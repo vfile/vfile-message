@@ -10,11 +10,11 @@ import {VFileMessage} from './index.js'
 
 /* eslint-disable no-undef */
 /** @type {Error} */
-var exception
+let exception
 /** @type {Error} */
-var changedMessage
+let changedMessage
 /** @type {Error} */
-var multilineException
+let multilineException
 
 try {
   // @ts-ignore
@@ -48,7 +48,7 @@ try {
 
 test('VFileMessage(reason[, place][, origin])', function (t) {
   /** @type {VFileMessage} */
-  var message
+  let message
 
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 

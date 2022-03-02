@@ -17,16 +17,14 @@ export class VFileMessage extends Error {
    */
   constructor(reason, place, origin) {
     /** @type {[string|null, string|null]} */
-    var parts = [null, null]
+    const parts = [null, null]
     /** @type {Position} */
-    var position = {
+    let position = {
       // @ts-expect-error: we always follows the structure of `position`.
       start: {line: null, column: null},
       // @ts-expect-error: "
       end: {line: null, column: null}
     }
-    /** @type {number} */
-    var index
 
     super()
 
@@ -36,7 +34,7 @@ export class VFileMessage extends Error {
     }
 
     if (typeof origin === 'string') {
-      index = origin.indexOf(':')
+      const index = origin.indexOf(':')
 
       if (index === -1) {
         parts[1] = origin
