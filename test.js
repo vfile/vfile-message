@@ -1,7 +1,7 @@
 /**
- * @typedef {Record<string, unknown> & {type: string, position?: Position|undefined}} NodeLike
  * @typedef {import('unist').Position} Position
  * @typedef {import('unist').Point} Point
+ * @typedef {import('mdast').Root} Root
  */
 
 import path from 'node:path'
@@ -17,7 +17,7 @@ let changedMessage
 let multilineException
 
 try {
-  // @ts-ignore
+  // @ts-expect-error
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
@@ -26,7 +26,7 @@ try {
 }
 
 try {
-  // @ts-ignore
+  // @ts-expect-error
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
@@ -36,7 +36,7 @@ try {
 }
 
 try {
-  // @ts-ignore
+  // @ts-expect-error
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
@@ -47,67 +47,52 @@ try {
 /* eslint-enable no-undef */
 
 test('VFileMessage(reason[, place][, origin])', function (t) {
-  /** @type {VFileMessage} */
-  let message
-
   t.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 
-  message = new VFileMessage('Foo')
+  const m1 = new VFileMessage('Foo')
 
-  t.equal(message.name, '1:1')
-  t.equal(message.file, '')
-  t.equal(message.reason, 'Foo')
-  t.equal(message.ruleId, null)
-  t.equal(message.source, null)
-  t.equal(message.stack, '')
-  t.equal(message.fatal, null)
-  t.equal(message.line, null)
-  t.equal(message.column, null)
-  t.deepEqual(message.position, {
+  t.equal(m1.name, '1:1')
+  t.equal(m1.file, '')
+  t.equal(m1.reason, 'Foo')
+  t.equal(m1.ruleId, null)
+  t.equal(m1.source, null)
+  t.equal(m1.stack, '')
+  t.equal(m1.fatal, null)
+  t.equal(m1.line, null)
+  t.equal(m1.column, null)
+  t.deepEqual(m1.position, {
     start: {line: null, column: null},
     end: {line: null, column: null}
   })
 
-  t.equal(
-    String(message),
-    '1:1: Foo',
-    'should have a pretty `toString()` message'
-  )
+  t.equal(String(m1), '1:1: Foo', 'should have a pretty `toString()` message')
 
-  message = new VFileMessage(exception)
+  const m2 = new VFileMessage(exception)
+
+  t.equal(m2.message, 'variable is not defined', 'should accept an error (1)')
 
   t.equal(
-    message.message,
-    'variable is not defined',
-    'should accept an error (1)'
-  )
-
-  t.equal(
-    String(message.stack || '').split('\n')[0],
+    String(m2.stack || '').split('\n')[0],
     'ReferenceError: variable is not defined',
     'should accept an error (2)'
   )
 
-  message = new VFileMessage(changedMessage)
+  const m3 = new VFileMessage(changedMessage)
 
-  t.equal(message.message, 'foo', 'should accept a changed error (1)')
+  t.equal(m3.message, 'foo', 'should accept a changed error (1)')
 
   t.equal(
-    String(message.stack || '').split('\n')[0],
+    String(m3.stack || '').split('\n')[0],
     'ReferenceError: foo',
     'should accept a changed error (2)'
   )
 
-  message = new VFileMessage(multilineException)
+  const m4 = new VFileMessage(multilineException)
+
+  t.equal(m4.message, 'foo\nbar\nbaz', 'should accept a multiline error (1)')
 
   t.equal(
-    message.message,
-    'foo\nbar\nbaz',
-    'should accept a multiline error (1)'
-  )
-
-  t.equal(
-    String(message.stack || '')
+    String(m4.stack || '')
       .split('\n')
       .slice(0, 3)
       .join('\n'),
@@ -115,7 +100,7 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
     'should accept a multiline error (2)'
   )
 
-  const node = {
+  const literalNode = {
     type: 'x',
     position: {
       start: {line: 2, column: 3},
@@ -123,27 +108,45 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
     }
   }
 
-  message = new VFileMessage('test', node)
+  const m5 = new VFileMessage('test', literalNode)
 
-  t.deepEqual(message.position, node.position, 'should accept a node (1)')
-  t.equal(String(message), '2:3-2:5: test', 'should accept a node (2)')
+  t.deepEqual(m5.position, literalNode.position, 'should accept a node (1)')
+  t.equal(String(m5), '2:3-2:5: test', 'should accept a node (2)')
   t.equal(
     String(new VFileMessage('test', {type: 'x'})),
     '1:1-1:1: test',
     'should accept a node (3)'
   )
 
-  const position = node.position
-  message = new VFileMessage('test', position)
+  t.equal(
+    String(
+      new VFileMessage(
+        'xxx',
+        /** @type {Root} */ ({
+          type: 'root',
+          children: [],
+          position: {
+            start: {line: 1, column: 1},
+            end: {line: 2, column: 1}
+          }
+        })
+      )
+    ),
+    '1:1-2:1: xxx',
+    'should accept a node (4, typed)'
+  )
 
-  t.deepEqual(message.position, position, 'should accept a position (1)')
-  t.equal(String(message), '2:3-2:5: test', 'should accept a position (2)')
+  const position = literalNode.position
+  const m6 = new VFileMessage('test', position)
+
+  t.deepEqual(m6.position, position, 'should accept a position (1)')
+  t.equal(String(m6), '2:3-2:5: test', 'should accept a position (2)')
 
   const point = position.start
-  message = new VFileMessage('test', point)
+  const m7 = new VFileMessage('test', point)
 
   t.deepEqual(
-    message.position,
+    m7.position,
     {
       start: point,
       end: {line: null, column: null}
@@ -151,27 +154,27 @@ test('VFileMessage(reason[, place][, origin])', function (t) {
     'should accept a position (3)'
   )
 
-  t.equal(String(message), '2:3: test', 'should accept a position (4)')
+  t.equal(String(m7), '2:3: test', 'should accept a position (4)')
 
   t.deepEqual(
-    // @ts-ignore
+    // @ts-expect-error
     new VFileMessage('test', {}).position,
     {start: {line: null, column: null}, end: {line: null, column: null}},
     'should ignore an empty object'
   )
 
   t.equal(
-    // @ts-ignore runtime supports an overload w/o position.
+    // @ts-expect-error runtime supports an overload w/o position.
     new VFileMessage('test', 'charlie').ruleId,
     'charlie',
     'should accept a `ruleId` as `origin`'
   )
 
-  // @ts-ignore runtime supports an overload w/o position.
-  message = new VFileMessage('test', 'delta:echo')
+  // @ts-expect-error runtime supports an overload w/o position.
+  const m8 = new VFileMessage('test', 'delta:echo')
 
   t.deepEqual(
-    [message.source, message.ruleId],
+    [m8.source, m8.ruleId],
     ['delta', 'echo'],
     'should accept a `source` and `ruleId` in `origin`'
   )

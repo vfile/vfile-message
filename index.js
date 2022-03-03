@@ -1,7 +1,8 @@
 /**
- * @typedef {Record<string, unknown> & {type: string, position?: Position|undefined}} NodeLike
+ * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Position} Position
  * @typedef {import('unist').Point} Point
+ * @typedef {object & {type: string, position?: Position|undefined}} NodeLike
  */
 
 import {stringifyPosition} from 'unist-util-stringify-position'
@@ -12,7 +13,7 @@ export class VFileMessage extends Error {
    * When an error is passed in as `reason`, copies the `stack`.
    *
    * @param {string|Error} reason Reason for message (`string` or `Error`). Uses the stack and message of the error if given.
-   * @param {NodeLike|Position|Point} [place] Place at which the message occurred in a file (`Node`, `Position`, or `Point`, optional).
+   * @param {Node|NodeLike|Position|Point} [place] Place at which the message occurred in a file (`Node`, `Position`, or `Point`, optional).
    * @param {string} [origin] Place in code the message originates from (`string`, optional).
    */
   constructor(reason, place, origin) {
@@ -53,12 +54,10 @@ export class VFileMessage extends Error {
       }
       // Position.
       else if ('start' in place || 'end' in place) {
-        // @ts-ignore Looks like a position.
         position = place
       }
       // Point.
       else if ('line' in place || 'column' in place) {
-        // @ts-ignore Looks like a point.
         position.start = place
       }
     }
