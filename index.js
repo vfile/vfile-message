@@ -82,6 +82,10 @@ export class VFileMessage extends Error {
     /**
      * Whether this is a fatal problem that marks an associated file as no
      * longer processable.
+     * If `true`, marks associated file as no longer processable.
+     * If `false`, necessitates a (potential) change.
+     * The value can also be `null` or `undefined`, for things that might not
+     * need changing.
      *
      * @type {boolean?}
      */
@@ -102,20 +106,6 @@ export class VFileMessage extends Error {
     this.column = position.start.column
 
     /**
-     * Namespace of warning.
-     *
-     * @type {string?}
-     */
-    this.source = parts[0]
-
-    /**
-     * Category of message.
-     *
-     * @type {string?}
-     */
-    this.ruleId = parts[1]
-
-    /**
      * Full range information, when available.
      * Has `start` and `end` fields, both set to an object with `line` and
      * `column`, set to `number?`.
@@ -125,7 +115,21 @@ export class VFileMessage extends Error {
     this.position = position
 
     /**
-     * A path of a file (used throughout the VFile ecosystem).
+     * Namespace of warning (example: `'my-package'`).
+     *
+     * @type {string?}
+     */
+    this.source = parts[0]
+
+    /**
+     * Category of message (example: `'my-rule-name'`).
+     *
+     * @type {string?}
+     */
+    this.ruleId = parts[1]
+
+    /**
+     * Path of a file (used throughout the VFile ecosystem).
      *
      * @type {string?}
      */
