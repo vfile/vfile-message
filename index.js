@@ -9,12 +9,16 @@ import {stringifyPosition} from 'unist-util-stringify-position'
 
 export class VFileMessage extends Error {
   /**
-   * Constructor of a message for `reason` at `place` from `origin`.
-   * When an error is passed in as `reason`, copies the `stack`.
+   * Create a message for `reason` at `place` from `origin`.
+   * When an error is passed in as `reason`, the `stack` is copied.
    *
-   * @param {string|Error} reason Reason for message (`string` or `Error`). Uses the stack and message of the error if given.
-   * @param {Node|NodeLike|Position|Point} [place] Place at which the message occurred in a file (`Node`, `Position`, or `Point`, optional).
-   * @param {string} [origin] Place in code the message originates from (`string`, optional).
+   * @param {string|Error} reason
+   *   Reason for message.
+   *   Uses the stack and message of the error if given.
+   * @param {Node|NodeLike|Position|Point} [place]
+   *   Place at which the message occurred in a file.
+   * @param {string} [origin]
+   *   Place in code the message originates from (example `'my-package:my-rule-name'`)
    */
   constructor(reason, place, origin) {
     /** @type {[string|null, string|null]} */
@@ -69,71 +73,94 @@ export class VFileMessage extends Error {
 
     /**
      * Reason for message.
+     *
      * @type {string}
      */
     this.reason = this.message
+
+    /* eslint-disable no-unused-expressions */
     /**
-     * If true, marks associated file as no longer processable.
+     * Whether this is a fatal problem that marks an associated file as no
+     * longer processable.
+     *
      * @type {boolean?}
      */
-    // eslint-disable-next-line no-unused-expressions
     this.fatal
+
     /**
      * Starting line of error.
+     *
      * @type {number?}
      */
     this.line = position.start.line
+
     /**
      * Starting column of error.
+     *
      * @type {number?}
      */
     this.column = position.start.column
+
     /**
      * Namespace of warning.
+     *
      * @type {string?}
      */
     this.source = parts[0]
+
     /**
      * Category of message.
+     *
      * @type {string?}
      */
     this.ruleId = parts[1]
+
     /**
      * Full range information, when available.
-     * Has start and end properties, both set to an object with line and column, set to number?.
+     * Has `start` and `end` fields, both set to an object with `line` and
+     * `column`, set to `number?`.
+     *
      * @type {Position?}
      */
     this.position = position
+
+    /**
+     * A path of a file (used throughout the VFile ecosystem).
+     *
+     * @type {string?}
+     */
+    this.file
 
     // The following fields are “well known”.
     // Not standard.
     // Feel free to add other non-standard fields to your messages.
 
-    /* eslint-disable no-unused-expressions */
     /**
-     * You can use this to specify the source value that’s being reported, which
-     * is deemed incorrect.
+     * Specify the source value that’s being reported, which is deemed
+     * incorrect.
+     *
      * @type {string?}
      */
     this.actual
+
     /**
-     * You can use this to suggest values that should be used instead of
-     * `actual`, one or more values that are deemed as acceptable.
+     * Suggest values that should be used instead of `actual`, one or more
+     * values that are deemed as acceptable.
+     *
      * @type {Array<string>?}
      */
     this.expected
+
     /**
-     * You may add a file property with a path of a file (used throughout the VFile ecosystem).
-     * @type {string?}
-     */
-    this.file
-    /**
-     * You may add a url property with a link to documentation for the message.
+     * Link to documentation for the message.
+     *
      * @type {string?}
      */
     this.url
+
     /**
-     * You may add a note property with a long form description of the message (supported by vfile-reporter).
+     * Long form description of the message (supported by `vfile-reporter`).
+     *
      * @type {string?}
      */
     this.note
