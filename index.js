@@ -10,6 +10,7 @@ import {stringifyPosition} from 'unist-util-stringify-position'
 export class VFileMessage extends Error {
   /**
    * Create a message for `reason` at `place` from `origin`.
+   *
    * When an error is passed in as `reason`, the `stack` is copied.
    *
    * @param {string|Error|VFileMessage} reason
