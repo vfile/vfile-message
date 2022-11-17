@@ -12,7 +12,7 @@ export class VFileMessage extends Error {
    * Create a message for `reason` at `place` from `origin`.
    * When an error is passed in as `reason`, the `stack` is copied.
    *
-   * @param {string|Error} reason
+   * @param {string|Error|VFileMessage} reason
    *   Reason for message.
    *   Uses the stack and message of the error if given.
    * @param {Node|NodeLike|Position|Point} [place]
@@ -70,8 +70,14 @@ export class VFileMessage extends Error {
 
     // Fields from `Error`
     this.name = stringifyPosition(place) || '1:1'
+    /** @type {string} */
     this.message = typeof reason === 'object' ? reason.message : reason
-    this.stack = typeof reason === 'object' ? reason.stack : ''
+    /** @type {string} */
+    this.stack = ''
+
+    if (typeof reason === 'object' && reason.stack) {
+      this.stack = reason.stack
+    }
 
     /**
      * Reason for message.
