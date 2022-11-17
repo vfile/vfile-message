@@ -53,11 +53,13 @@ export class VFileMessage extends Error {
       // Node.
       if ('type' in place || 'position' in place) {
         if (place.position) {
+          // @ts-expect-error: looks like a position.
           position = place.position
         }
       }
       // Position.
       else if ('start' in place || 'end' in place) {
+        // @ts-expect-error: looks like a position.
         position = place
       }
       // Point.
