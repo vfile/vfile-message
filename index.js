@@ -2,7 +2,7 @@
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Position} Position
  * @typedef {import('unist').Point} Point
- * @typedef {object & {type: string, position?: Position|undefined}} NodeLike
+ * @typedef {object & {type: string, position?: Position | undefined}} NodeLike
  */
 
 import {stringifyPosition} from 'unist-util-stringify-position'
@@ -13,16 +13,17 @@ export class VFileMessage extends Error {
    *
    * When an error is passed in as `reason`, the `stack` is copied.
    *
-   * @param {string|Error|VFileMessage} reason
+   * @param {string | Error | VFileMessage} reason
    *   Reason for message.
    *   Uses the stack and message of the error if given.
-   * @param {Node|NodeLike|Position|Point} [place]
+   * @param {Node | NodeLike | Position | Point | null | undefined} [place]
    *   Place at which the message occurred in a file.
-   * @param {string} [origin]
+   * @param {string | null | undefined} [origin]
    *   Place in code the message originates from (example `'my-package:my-rule-name'`)
    */
+  // To do: next major: expose `undefined` everywhere instead of `null`.
   constructor(reason, place, origin) {
-    /** @type {[string|null, string|null]} */
+    /** @type {[string | null, string | null]} */
     const parts = [null, null]
     /** @type {Position} */
     let position = {
@@ -69,11 +70,30 @@ export class VFileMessage extends Error {
       }
     }
 
-    // Fields from `Error`
+    // Fields from `Error`.
+    /**
+     * Serialized positional info of error.
+     *
+     * On normal errors, this would be something like `ParseError`, buit in
+     * `VFile` messages we use this space to show where an error happened.
+     */
     this.name = stringifyPosition(place) || '1:1'
-    /** @type {string} */
+
+    /**
+     * Reason for message.
+     *
+     * @type {string}
+     */
     this.message = typeof reason === 'object' ? reason.message : reason
-    /** @type {string} */
+
+    /**
+     * Stack of message.
+     *
+     * This is used by normal errors to show where something happened in
+     * programming code, irrelevant for `VFile` messages,
+     *
+     * @type {string}
+     */
     this.stack = ''
 
     if (typeof reason === 'object' && reason.stack) {
@@ -91,56 +111,58 @@ export class VFileMessage extends Error {
     /**
      * Whether this is a fatal problem that marks an associated file as no
      * longer processable.
+     *
      * If `true`, marks associated file as no longer processable.
      * If `false`, necessitates a (potential) change.
      * The value can also be `null` or `undefined`, for things that might not
      * need changing.
      *
-     * @type {boolean?}
+     * @type {boolean | null | undefined}
      */
     this.fatal
 
     /**
      * Starting line of error.
      *
-     * @type {number?}
+     * @type {number | null}
      */
     this.line = position.start.line
 
     /**
      * Starting column of error.
      *
-     * @type {number?}
+     * @type {number | null}
      */
     this.column = position.start.column
 
     /**
      * Full range information, when available.
-     * Has `start` and `end` fields, both set to an object with `line` and
-     * `column`, set to `number?`.
      *
-     * @type {Position?}
+     * Has `start` and `end` fields, both set to an object with `line` and
+     * `column`, set to `number | null`.
+     *
+     * @type {Position | null}
      */
     this.position = position
 
     /**
      * Namespace of warning (example: `'my-package'`).
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.source = parts[0]
 
     /**
      * Category of message (example: `'my-rule-name'`).
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.ruleId = parts[1]
 
     /**
-     * Path of a file (used throughout the VFile ecosystem).
+     * Path of a file (used throughout the `VFile` ecosystem).
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.file
 
@@ -152,7 +174,7 @@ export class VFileMessage extends Error {
      * Specify the source value that’s being reported, which is deemed
      * incorrect.
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.actual
 
@@ -160,21 +182,21 @@ export class VFileMessage extends Error {
      * Suggest values that should be used instead of `actual`, one or more
      * values that are deemed as acceptable.
      *
-     * @type {Array<string>?}
+     * @type {Array<string> | null}
      */
     this.expected
 
     /**
      * Link to documentation for the message.
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.url
 
     /**
      * Long form description of the message (supported by `vfile-reporter`).
      *
-     * @type {string?}
+     * @type {string | null}
      */
     this.note
     /* eslint-enable no-unused-expressions */

@@ -180,7 +180,7 @@ Specify the source value that’s being reported, which is deemed incorrect
 ###### `expected`
 
 Suggest values that should be used instead of `actual`, one or more values that
-are deemed as acceptable (`(string|Array<string>)?`)
+are deemed as acceptable (`(string | Array<string>)?`)
 
 ###### `url`
 

@@ -196,7 +196,7 @@ test('VFileMessage(reason[, place][, origin])', function () {
 })
 
 /**
- * @param {string|undefined} stack
+ * @param {string | undefined} stack
  * @param {number} max
  * @returns {string}
  */
