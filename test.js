@@ -6,6 +6,7 @@ import assert from 'node:assert/strict'
 import path from 'node:path'
 import test from 'node:test'
 import {VFileMessage} from './index.js'
+import * as mod from './index.js'
 
 /* eslint-disable no-undef */
 /** @type {Error} */
@@ -45,7 +46,13 @@ try {
 }
 /* eslint-enable no-undef */
 
-test('VFileMessage(reason[, place][, origin])', function () {
+test('VFileMessage', function () {
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['VFileMessage'],
+    'should expose the public api'
+  )
+
   assert.ok(new VFileMessage('') instanceof Error, 'should return an Error')
 
   const m1 = new VFileMessage('Foo')
