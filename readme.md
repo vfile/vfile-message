@@ -18,7 +18,7 @@ Create [vfile][] messages.
 *   [Use](#use)
 *   [API](#api)
     *   [`VFileMessage(reason[, place][, origin])`](#vfilemessagereason-place-origin)
-    *   [Well-known fields](#well-known-fields)
+    *   [Well-known](#well-known)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Contribute](#contribute)
@@ -37,7 +37,7 @@ in which case this can be used directly.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+, 16.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install vfile-message
@@ -86,110 +86,74 @@ Yields:
 
 ## API
 
-This package exports the identifier `VFileMessage`.
+This package exports the identifier [`VFileMessage`][api-vfile-message].
 There is no default export.
 
 ### `VFileMessage(reason[, place][, origin])`
 
 Create a message for `reason` at `place` from `origin`.
+
 When an error is passed in as `reason`, the `stack` is copied.
 
-##### Parameters
+###### Parameters
 
-###### `reason`
+*   `reason` (`string` or `Error`)
+    — reason for message, uses the stack and message of the error if given
+*   `place` ([`Node`][node], [`Position`][position], or [`Point`][point],
+    optional)
+    — place in file where the message occurred
+*   `origin` (`string`, optional)
+    — place in code where the message originates (example:
+    `'my-package:my-rule'` or `'my-rule'`)
 
-Reason for message (`string` or `Error`).
-Uses the stack and message of the error if given.
-
-###### `place`
-
-Place at which the message occurred in a file ([`Node`][node],
-[`Position`][position], or [`Point`][point], optional).
-
-###### `origin`
-
-Place in code the message originates from (`string`, optional).
-
-Can either be the [`ruleId`][ruleid] (`'rule'`), or a string with both a
-[`source`][source] and a [`ruleId`][ruleid] delimited with a colon
-(`'source:rule'`).
-
-##### Extends
+###### Extends
 
 [`Error`][error].
 
-##### Returns
+###### Returns
 
-An instance of itself.
+Instance of `VFileMessage`.
 
-##### Properties
+###### Fields
 
-###### `reason`
+*   `reason` (`string`)
+    — reason for message (you should use markdown)
+*   `fatal` (`boolean | null | undefined`)
+    — state of problem; `true` marks associated file as no longer processable
+    (error); `false` necessitates a (potential) change (warning);
+    `null | undefined` for things that might not need changing (info)
+*   `line` (`number | null`)
+    — starting line of error
+*   `column` (`number | null`)
+    — starting column of error
+*   `position` ([`Position | null`][position])
+    — full unist position
+*   `source` (`string | null`, example: `'my-package'`)
+    — namespace of message
+*   `ruleId` (`string | null`, example: `'my-rule'`)
+    — category of message
+*   `stack` (`string | null`)
+    — stack of message in code
+*   `file` (`string | null`)
+    — path of a file (used throughout the `VFile` ecosystem)
 
-Reason for message (`string`).
-
-###### `fatal`
-
-Whether this is a fatal problem that marks an associated file as no longer
-processable (`boolean?`).
-If `true`, marks associated file as no longer processable.
-If `false`, necessitates a (potential) change.
-The value can also be `null` or `undefined`, for things that might not need
-changing.
-
-###### `line`
-
-Starting line of error (`number?`).
-
-###### `column`
-
-Starting column of error (`number?`).
-
-###### `position`
-
-Full range information, when available ([`Position`][position]).
-Has `start` and `end` properties, both set to an object with `line` and
-`column`, set to `number?`.
-
-###### `source`
-
-Namespace of message (`string?`, example: `'my-package'`).
-
-###### `ruleId`
-
-Category of message (`string?`, example: `'my-rule-name'`).
-
-###### `stack`
-
-Stack of message (`string?`).
-
-###### `file`
-
-Path of a file (used throughout the vfile ecosystem).
-
-### Well-known fields
+### Well-known
 
 It’s OK to store custom data directly on the `VFileMessage`, some of those are
 handled by [utilities][util].
+The following fields are documented and typed here.
 
-###### `actual`
+###### Fields
 
-Specify the source value that’s being reported, which is deemed incorrect
-(`string?`).
-
-###### `expected`
-
-Suggest values that should be used instead of `actual`, one or more values that
-are deemed as acceptable (`(string | Array<string>)?`)
-
-###### `url`
-
-Link to documentation for the message (`string`).
-
-###### `note`
-
-Long form description of the message (supported by
-[`vfile-reporter`][reporter]).
+*   `actual` (`string | null`)
+    — specify the source value that’s being reported, which is deemed incorrect
+*   `expected` (`Array<string> | null`)
+    — suggest acceptable values that can be used instead of `actual`
+*   `url` (`string | null`)
+    — link to docs for the message (this must be an absolute URL that can be
+    passed as `x` to `new URL(x)`)
+*   `note` (`string | null`)
+    — long form description of the message (you should use markdown)
 
 ## Types
 
@@ -277,8 +241,4 @@ abide by its terms.
 
 [util]: https://github.com/vfile/vfile#utilities
 
-[reporter]: https://github.com/vfile/vfile-reporter
-
-[ruleid]: #ruleid
-
-[source]: #source
+[api-vfile-message]: #vfilemessagereason-place-origin
