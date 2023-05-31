@@ -80,7 +80,7 @@ Yields:
   column: 8,
   source: 'spell',
   ruleId: 'typo',
-  position: {start: {line: 1, column: 8}, end: {line: null, column: null}}
+  position: {start: {line: 1, column: 8}, end: {line: undefined, column: undefined}}
 }
 ```
 
@@ -118,23 +118,23 @@ Instance of `VFileMessage`.
 
 *   `reason` (`string`)
     — reason for message (you should use markdown)
-*   `fatal` (`boolean | null | undefined`)
+*   `fatal` (`boolean | undefined`)
     — state of problem; `true` marks associated file as no longer processable
     (error); `false` necessitates a (potential) change (warning);
-    `null | undefined` for things that might not need changing (info)
-*   `line` (`number | null`)
+    `undefined` for things that might not need changing (info)
+*   `line` (`number | undefined`)
     — starting line of error
-*   `column` (`number | null`)
+*   `column` (`number | undefined`)
     — starting column of error
-*   `position` ([`Position | null`][position])
+*   `position` ([`Position | undefined`][position])
     — full unist position
-*   `source` (`string | null`, example: `'my-package'`)
+*   `source` (`string | undefined`, example: `'my-package'`)
     — namespace of message
-*   `ruleId` (`string | null`, example: `'my-rule'`)
+*   `ruleId` (`string | undefined`, example: `'my-rule'`)
     — category of message
-*   `stack` (`string | null`)
+*   `stack` (`string | undefined`)
     — stack of message in code
-*   `file` (`string | null`)
+*   `file` (`string | undefined`)
     — path of a file (used throughout the `VFile` ecosystem)
 
 ### Well-known
@@ -145,14 +145,14 @@ The following fields are documented and typed here.
 
 ###### Fields
 
-*   `actual` (`string | null`)
+*   `actual` (`string`, optional)
     — specify the source value that’s being reported, which is deemed incorrect
-*   `expected` (`Array<string> | null`)
+*   `expected` (`Array<string>`, optional)
     — suggest acceptable values that can be used instead of `actual`
-*   `url` (`string | null`)
+*   `url` (`string`, optional)
     — link to docs for the message (this must be an absolute URL that can be
     passed as `x` to `new URL(x)`)
-*   `note` (`string | null`)
+*   `note` (`string`, optional)
     — long form description of the message (you should use markdown)
 
 ## Types
