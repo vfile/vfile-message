@@ -131,7 +131,7 @@ test('VFileMessage', async function () {
   assert.equal(String(m5), '2:3-2:5: test', 'should accept a node (2)')
   assert.equal(
     String(new VFileMessage('test', {type: 'x'})),
-    '1:1-1:1: test',
+    '1:1: test',
     'should accept a node (3)'
   )
 
@@ -174,7 +174,6 @@ test('VFileMessage', async function () {
   assert.equal(String(m7), '2:3: test', 'should accept a position (4)')
 
   assert.deepEqual(
-    // @ts-expect-error: incorrect input `place`.
     new VFileMessage('test', {}).position,
     {
       start: {line: undefined, column: undefined},
@@ -195,5 +194,26 @@ test('VFileMessage', async function () {
     [m8.source, m8.ruleId],
     ['delta', 'echo'],
     'should accept a `source` and `ruleId` in `origin`'
+  )
+
+  const m9 = new VFileMessage('Something went wrong', {
+    ancestors: [literalNode],
+    cause: exception,
+    fatal: true,
+    place: literalNode.position,
+    ruleId: 'my-rule',
+    source: 'my-package'
+  })
+
+  assert.equal(m9.reason, 'Something went wrong', 'should support options')
+  assert.deepEqual(
+    [m9.line, m9.column],
+    [2, 3],
+    'should support `options.place` for `line`/`column`'
+  )
+  assert.deepEqual(
+    [m9.source, m9.ruleId],
+    ['my-package', 'my-rule'],
+    'should support `options.source`, `options.ruleId`'
   )
 })
