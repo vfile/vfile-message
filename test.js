@@ -3,10 +3,8 @@
  */
 
 import assert from 'node:assert/strict'
-import path from 'node:path'
 import test from 'node:test'
 import {VFileMessage} from './index.js'
-import * as mod from './index.js'
 
 /* eslint-disable no-undef */
 /** @type {Error} */
@@ -17,38 +15,35 @@ let changedMessage
 let multilineException
 
 try {
-  // @ts-expect-error
+  // @ts-expect-error: we want to capture this error.
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
-  error.stack = cleanStack(error.stack, 3)
   exception = error
 }
 
 try {
-  // @ts-expect-error
+  // @ts-expect-error: we want to capture this error.
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
   error.message = 'foo'
-  error.stack = cleanStack(error.stack, 3)
   changedMessage = error
 }
 
 try {
-  // @ts-expect-error
+  // @ts-expect-error: we want to capture this error.
   variable = 1
 } catch (error_) {
   const error = /** @type {Error} */ (error_)
   error.message = 'foo\nbar\nbaz'
-  error.stack = cleanStack(error.stack, 5)
   multilineException = error
 }
 /* eslint-enable no-undef */
 
-test('VFileMessage', function () {
+test('VFileMessage', async function () {
   assert.deepEqual(
-    Object.keys(mod).sort(),
+    Object.keys(await import('./index.js')).sort(),
     ['VFileMessage'],
     'should expose the public api'
   )
@@ -179,7 +174,7 @@ test('VFileMessage', function () {
   assert.equal(String(m7), '2:3: test', 'should accept a position (4)')
 
   assert.deepEqual(
-    // @ts-expect-error
+    // @ts-expect-error: incorrect input `place`.
     new VFileMessage('test', {}).position,
     {
       start: {line: undefined, column: undefined},
@@ -189,13 +184,11 @@ test('VFileMessage', function () {
   )
 
   assert.equal(
-    // @ts-expect-error runtime supports an overload w/o position.
     new VFileMessage('test', 'charlie').ruleId,
     'charlie',
     'should accept a `ruleId` as `origin`'
   )
 
-  // @ts-expect-error runtime supports an overload w/o position.
   const m8 = new VFileMessage('test', 'delta:echo')
 
   assert.deepEqual(
@@ -204,17 +197,3 @@ test('VFileMessage', function () {
     'should accept a `source` and `ruleId` in `origin`'
   )
 })
-
-/**
- * @param {string | undefined} stack
- * @param {number} max
- * @returns {string}
- */
-function cleanStack(stack, max) {
-  return String(stack || '')
-    .replace(new RegExp('\\(.+\\' + path.sep, 'g'), '(')
-    .replace(/\d+:\d+/g, '1:1')
-    .split('\n')
-    .slice(0, max)
-    .join('\n')
-}
