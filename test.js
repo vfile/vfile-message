@@ -60,15 +60,15 @@ test('VFileMessage', function () {
   assert.equal(m1.name, '1:1')
   assert.equal(m1.file, '')
   assert.equal(m1.reason, 'Foo')
-  assert.equal(m1.ruleId, null)
-  assert.equal(m1.source, null)
+  assert.equal(m1.ruleId, undefined)
+  assert.equal(m1.source, undefined)
   assert.equal(m1.stack, '')
-  assert.equal(m1.fatal, null)
-  assert.equal(m1.line, null)
-  assert.equal(m1.column, null)
+  assert.equal(m1.fatal, undefined)
+  assert.equal(m1.line, undefined)
+  assert.equal(m1.column, undefined)
   assert.deepEqual(m1.position, {
-    start: {line: null, column: null},
-    end: {line: null, column: null}
+    start: {line: undefined, column: undefined},
+    end: {line: undefined, column: undefined}
   })
 
   assert.equal(
@@ -171,7 +171,7 @@ test('VFileMessage', function () {
     m7.position,
     {
       start: point,
-      end: {line: null, column: null}
+      end: {line: undefined, column: undefined}
     },
     'should accept a position (3)'
   )
@@ -181,7 +181,10 @@ test('VFileMessage', function () {
   assert.deepEqual(
     // @ts-expect-error
     new VFileMessage('test', {}).position,
-    {start: {line: null, column: null}, end: {line: null, column: null}},
+    {
+      start: {line: undefined, column: undefined},
+      end: {line: undefined, column: undefined}
+    },
     'should ignore an empty object'
   )
 
