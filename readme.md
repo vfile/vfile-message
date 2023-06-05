@@ -37,7 +37,7 @@ in which case this can be used directly.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 14.14+ and 16.0+), install with [npm][]:
+In Node.js (version 16+), install with [npm][]:
 
 ```sh
 npm install vfile-message
@@ -94,6 +94,11 @@ There is no default export.
 Create a message for `reason` at `place` from `origin`.
 
 When an error is passed in as `reason`, the `stack` is copied.
+
+###### Signatures
+
+*   `(reason, place, origin) => VFileMessage`
+*   `(reason, origin) => VFileMessage`
 
 ###### Parameters
 
@@ -162,10 +167,13 @@ It exports no additional types.
 
 ## Compatibility
 
-Projects maintained by the unified collective are compatible with all maintained
-versions of Node.js.
-As of now, that is Node.js 14.14+ and 16.0+.
-Our projects sometimes work with older versions, but this is not guaranteed.
+Projects maintained by the unified collective are compatible with maintained
+versions of Node.js (as of June 2023, that is Node.js 16+).
+
+When we cut a new major release, we drop support for unmaintained versions of
+Node.
+This means we try to keep the current release line, `vfile-message@^3`,
+compatible with Node.js 12.
 
 ## Contribute
 
@@ -195,9 +203,9 @@ abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/vfile-message
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/vfile-message.svg
+[size-badge]: https://img.shields.io/badge/dynamic/json?label=minzipped%20size&query=$.size.compressedSize&url=https://deno.bundlejs.com/?q=vfile-message
 
-[size]: https://bundlephobia.com/result?p=vfile-message
+[size]: https://bundlejs.com/?q=vfile-message
 
 [sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
