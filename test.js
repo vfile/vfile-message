@@ -61,10 +61,7 @@ test('VFileMessage', async function () {
   assert.equal(m1.fatal, undefined)
   assert.equal(m1.line, undefined)
   assert.equal(m1.column, undefined)
-  assert.deepEqual(m1.position, {
-    start: {line: undefined, column: undefined},
-    end: {line: undefined, column: undefined}
-  })
+  assert.deepEqual(m1.place, undefined)
 
   assert.equal(
     String(m1),
@@ -123,11 +120,7 @@ test('VFileMessage', async function () {
 
   const m5 = new VFileMessage('test', literalNode)
 
-  assert.deepEqual(
-    m5.position,
-    literalNode.position,
-    'should accept a node (1)'
-  )
+  assert.deepEqual(m5.place, literalNode.position, 'should accept a node (1)')
   assert.equal(String(m5), '2:3-2:5: test', 'should accept a node (2)')
   assert.equal(
     String(new VFileMessage('test', {type: 'x'})),
@@ -156,31 +149,15 @@ test('VFileMessage', async function () {
   const position = literalNode.position
   const m6 = new VFileMessage('test', position)
 
-  assert.deepEqual(m6.position, position, 'should accept a position (1)')
+  assert.deepEqual(m6.place, position, 'should accept a position (1)')
   assert.equal(String(m6), '2:3-2:5: test', 'should accept a position (2)')
 
   const point = position.start
   const m7 = new VFileMessage('test', point)
 
-  assert.deepEqual(
-    m7.position,
-    {
-      start: point,
-      end: {line: undefined, column: undefined}
-    },
-    'should accept a position (3)'
-  )
+  assert.deepEqual(m7.place, point, 'should accept a position (3)')
 
   assert.equal(String(m7), '2:3: test', 'should accept a position (4)')
-
-  assert.deepEqual(
-    new VFileMessage('test', {}).position,
-    {
-      start: {line: undefined, column: undefined},
-      end: {line: undefined, column: undefined}
-    },
-    'should ignore an empty object'
-  )
 
   assert.equal(
     new VFileMessage('test', 'charlie').ruleId,
