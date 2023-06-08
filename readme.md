@@ -17,7 +17,8 @@ Create [vfile][] messages.
 *   [Install](#install)
 *   [Use](#use)
 *   [API](#api)
-    *   [`VFileMessage(reason[, place][, origin])`](#vfilemessagereason-place-origin)
+    *   [`VFileMessage(reason[, options])`](#vfilemessagereason-options)
+    *   [`Options`](#options)
     *   [Well-known](#well-known)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
@@ -64,8 +65,7 @@ import {VFileMessage} from 'vfile-message'
 
 const message = new VFileMessage(
   'Unexpected unknown word `braavo`, did you mean `bravo`?',
-  {line: 1, column: 8},
-  'spell:typo'
+  {source: 'spell', ruleId: 'typo', place: {line: 1, column: 8}}
 )
 
 console.log(message)
@@ -78,9 +78,12 @@ Yields:
   reason: 'Unexpected unknown word `braavo`, did you mean `bravo`?',
   line: 1,
   column: 8,
-  source: 'spell',
+  ancestors: undefined,
+  cause: undefined,
+  fatal: undefined,
+  place: {line: 1, column: 8},
   ruleId: 'typo',
-  position: {start: {line: 1, column: 8}, end: {line: undefined, column: undefined}}
+  source: 'spell'
 }
 ```
 
@@ -89,31 +92,23 @@ Yields:
 This package exports the identifier [`VFileMessage`][api-vfile-message].
 There is no default export.
 
-### `VFileMessage(reason[, place][, origin])`
+### `VFileMessage(reason[, options])`
 
-Create a message for `reason` at `place` from `origin`.
+Create a message for `reason`.
 
-When an error is passed in as `reason`, the `stack` is copied.
-
-###### Signatures
-
-*   `(reason, place, origin) => VFileMessage`
-*   `(reason, origin) => VFileMessage`
+> 👉 **Note**: in addition to the signature with `options`, there are
+> several legacy signatures still supported.
 
 ###### Parameters
 
-*   `reason` (`string` or `Error`)
-    — reason for message, uses the stack and message of the error if given
-*   `place` ([`Node`][node], [`Position`][position], or [`Point`][point],
-    optional)
-    — place in file where the message occurred
-*   `origin` (`string`, optional)
-    — place in code where the message originates (example:
-    `'my-package:my-rule'` or `'my-rule'`)
+*   `reason` (`string`)
+    — reason for message (should use markdown)
+*   `options` ([`Options`][api-options], optional)
+    — configuration.
 
 ###### Extends
 
-[`Error`][error].
+[`Error`][mdn-error].
 
 ###### Returns
 
@@ -121,26 +116,42 @@ Instance of `VFileMessage`.
 
 ###### Fields
 
+*   `ancestors` ([`Array<Node>`][unist-node] or `undefined`)
+    — stack of (inclusive) ancestor nodes surrounding the message
+*   `cause` ([`Error`][mdn-error] or `undefined`)
+    — original error cause of the message
+*   `column` (`number` or `undefined`)
+    — starting column of message
+*   `fatal` (`boolean` or `undefined`)
+    — state of problem; `true`: error, file not usable; `false`: warning,
+    change may be needed; `undefined`: info, change likely not needed
+*   `line` (`number` or `undefined`)
+    — starting line of message
+*   `place` ([`Point`][unist-point], [`Position`][unist-position] or `undefined`)
+    — place of message
 *   `reason` (`string`)
-    — reason for message (you should use markdown)
-*   `fatal` (`boolean | undefined`)
-    — state of problem; `true` marks associated file as no longer processable
-    (error); `false` necessitates a (potential) change (warning);
-    `undefined` for things that might not need changing (info)
-*   `line` (`number | undefined`)
-    — starting line of error
-*   `column` (`number | undefined`)
-    — starting column of error
-*   `position` ([`Position | undefined`][position])
-    — full unist position
-*   `source` (`string | undefined`, example: `'my-package'`)
-    — namespace of message
-*   `ruleId` (`string | undefined`, example: `'my-rule'`)
+    — reason for message (should use markdown)
+*   `ruleId` (`string` or `undefined`, example: `'my-rule'`)
     — category of message
-*   `stack` (`string | undefined`)
-    — stack of message in code
-*   `file` (`string | undefined`)
-    — path of a file (used throughout the `VFile` ecosystem)
+*   `source` (`string` or `undefined`, example: `'my-package'`)
+    — namespace of message
+
+### `Options`
+
+Configuration (TypeScript type).
+
+###### Fields
+
+*   `ancestors` ([`Array<Node>`][unist-node], optional)
+    — stack of (inclusive) ancestor nodes surrounding the message
+*   `cause` ([`Error`][mdn-error], optional)
+    — original error cause of the message
+*   `place` ([`Point`][unist-point] or [`Position`][unist-position], optional)
+    — place of message
+*   `ruleId` (`string`, optional, example: `'my-rule'`)
+    — category of message
+*   `source` (`string`, optional, , example: `'my-package'`)
+    — namespace of who sent the message
 
 ### Well-known
 
@@ -237,16 +248,18 @@ abide by its terms.
 
 [author]: https://wooorm.com
 
-[error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+[mdn-error]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 
-[node]: https://github.com/syntax-tree/unist#node
+[unist-node]: https://github.com/syntax-tree/unist#node
 
-[position]: https://github.com/syntax-tree/unist#position
+[unist-point]: https://github.com/syntax-tree/unist#point
 
-[point]: https://github.com/syntax-tree/unist#point
+[unist-position]: https://github.com/syntax-tree/unist#position
 
 [vfile]: https://github.com/vfile/vfile
 
 [util]: https://github.com/vfile/vfile#utilities
 
-[api-vfile-message]: #vfilemessagereason-place-origin
+[api-options]: #options
+
+[api-vfile-message]: #vfilemessagereason-options
