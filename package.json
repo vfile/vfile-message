@@ -25,6 +25,11 @@
   "sideEffects": false,
   "type": "module",
   "exports": "./index.js",
+  "files": [
+    "lib/",
+    "index.d.ts",
+    "index.js"
+  ],
   "dependencies": {
     "@types/unist": "^2.0.0",
     "unist-util-stringify-position": "^3.0.0"
