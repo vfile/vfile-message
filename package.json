@@ -24,13 +24,7 @@
   ],
   "sideEffects": false,
   "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "lib/",
-    "index.d.ts",
-    "index.js"
-  ],
+  "exports": "./index.js",
   "dependencies": {
     "@types/unist": "^2.0.0",
     "unist-util-stringify-position": "^3.0.0"

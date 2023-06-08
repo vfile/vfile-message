@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {VFileMessage} from './index.js'
+import {VFileMessage} from 'vfile-message'
 
 /* eslint-disable no-undef */
 /** @type {Error} */
@@ -43,7 +43,7 @@ try {
 
 test('VFileMessage', async function () {
   assert.deepEqual(
-    Object.keys(await import('./index.js')).sort(),
+    Object.keys(await import('vfile-message')).sort(),
     ['VFileMessage'],
     'should expose the public api'
   )
