@@ -176,7 +176,6 @@ test('VFileMessage', async function () {
   const m9 = new VFileMessage('Something went wrong', {
     ancestors: [literalNode],
     cause: exception,
-    fatal: true,
     place: literalNode.position,
     ruleId: 'my-rule',
     source: 'my-package'
