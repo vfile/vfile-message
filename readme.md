@@ -47,14 +47,14 @@ npm install vfile-message
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {VFileMessage} from 'https://esm.sh/vfile-message@3'
+import {VFileMessage} from 'https://esm.sh/vfile-message@4'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {VFileMessage} from 'https://esm.sh/vfile-message@3?bundle'
+  import {VFileMessage} from 'https://esm.sh/vfile-message@4?bundle'
 </script>
 ```
 
@@ -182,7 +182,7 @@ versions of Node.js.
 
 When we cut a new major release, we drop support for unmaintained versions of
 Node.
-This means we try to keep the current release line, `vfile-message@^3`,
+This means we try to keep the current release line, `vfile-message@^4`,
 compatible with Node.js 16.
 
 ## Contribute
