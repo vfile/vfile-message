@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "checkJs": true,
+    "noEmit": true,
     "customConditions": ["development"],
     "declaration": true,
     "emitDeclarationOnly": true,
@@ -11,5 +12,5 @@
     "target": "es2022"
   },
   "exclude": ["coverage/", "node_modules/"],
-  "include": ["**/*.js"]
+  "include": ["**/*.js", "types.d.ts"]
 }
