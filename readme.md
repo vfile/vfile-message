@@ -17,7 +17,6 @@ Create [vfile][github-vfile] messages.
   * [`VFileMessage(reason[, options])`](#vfilemessagereason-options)
   * [`Options`](#options)
   * [Well-known](#well-known)
-* [Types](#types)
 * [Compatibility](#compatibility)
 * [Contribute](#contribute)
 * [License](#license)
@@ -28,8 +27,10 @@ This package provides a (lint) message format.
 
 ## When should I use this?
 
-In most cases, you can use `file.message` from `VFile` itself, but in some
-cases you might not have a file, and still want to emit warnings or errors,
+In most cases,
+you can use `file.message` from `VFile` itself,
+but in some cases you might not have a file,
+and still want to emit warnings or errors,
 in which case this can be used directly.
 
 ## Install
@@ -63,7 +64,7 @@ import {VFileMessage} from 'vfile-message'
 
 const message = new VFileMessage(
   'Unexpected unknown word `braavo`, did you mean `bravo`?',
-  {source: 'spell', ruleId: 'typo', place: {line: 1, column: 8}}
+  {place: {column: 8, line: 1}, ruleId: 'typo', source: 'spell'}
 )
 
 console.log(message)
@@ -89,6 +90,7 @@ Yields:
 
 This package exports the identifier [`VFileMessage`][api-vfile-message].
 There is no default export.
+It exports the additional [TypeScript][] type [`Options`][api-options].
 
 ### `VFileMessage(reason[, options])`
 
@@ -169,11 +171,6 @@ The following fields are documented and typed here.
   passed as `x` to `new URL(x)`)
 * `note` (`string`, optional)
   — long form description of the message (you should use markdown)
-
-## Types
-
-This package is fully typed with [TypeScript][].
-It exports the additional type [`Options`][api-options].
 
 ## Compatibility
 
