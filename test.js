@@ -193,3 +193,24 @@ test('VFileMessage', async function () {
     'should support `options.source`, `options.ruleId`'
   )
 })
+
+test('VFileMessage when `Error.prototype.stack` is read-only', async function () {
+  // eslint-disable-next-line no-extend-native -- simulating a hardened realm.
+  Object.defineProperty(Error.prototype, 'stack', {
+    configurable: true,
+    value: '',
+    writable: false
+  })
+
+  try {
+    /** @type {{VFileMessage: typeof VFileMessage}} */
+    const mod = await import(
+      new URL('lib/index.js?read-only-stack', import.meta.url).href
+    )
+    const message = new mod.VFileMessage('x')
+    assert.equal(message.reason, 'x')
+    assert.equal(message.stack, '')
+  } finally {
+    delete Error.prototype.stack
+  }
+})
