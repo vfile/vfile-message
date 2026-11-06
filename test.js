@@ -173,6 +173,33 @@ test('VFileMessage', async function (t) {
     }
   )
 
+  await t.test('should support `options.ancestors`', async function () {
+    const node = {type: 'x'}
+    const message = new VFileMessage('test', {ancestors: [node]})
+
+    assert.deepEqual(message.ancestors, [node])
+  })
+
+  await t.test(
+    'should use the position of the last ancestor as `place`',
+    async function () {
+      const position = {start: {line: 2, column: 3}, end: {line: 2, column: 5}}
+      const message = new VFileMessage('test', {
+        ancestors: [{type: 'x'}, {type: 'y', position}]
+      })
+
+      assert.deepEqual(message.place, position)
+    }
+  )
+
+  await t.test('should support `options.cause`', async function () {
+    const cause = new Error('cause')
+    const message = new VFileMessage('test', {cause})
+
+    assert.equal(message.cause, cause)
+    assert.equal(message.reason, 'test')
+  })
+
   await t.test('should support `options.place`', async function () {
     const message = new VFileMessage('test', {
       place: {start: {line: 2, column: 3}, end: {line: 2, column: 5}}
@@ -194,11 +221,9 @@ test('VFileMessage', async function (t) {
       assert.equal(message.source, 'my-package')
     }
   )
-})
 
-test('VFileMessage.prototype', async function (t) {
   await t.test(
-    'should define defaults on `VFileMessage.prototype`',
+    'should set defaults on `VFileMessage.prototype`',
     async function () {
       assert.deepEqual(
         Object.getOwnPropertyDescriptor(VFileMessage.prototype, 'stack'),
