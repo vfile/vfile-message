@@ -3,8 +3,13 @@
  */
 
 import assert from 'node:assert/strict'
+import {execFile as execFileCallback} from 'node:child_process'
+import process from 'node:process'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import {VFileMessage} from 'vfile-message'
+
+const execFile = promisify(execFileCallback)
 
 /* eslint-disable no-undef -- `variable` is undefined on purpose. */
 /** @type {Error} */
@@ -191,5 +196,42 @@ test('VFileMessage', async function () {
     [m9.source, m9.ruleId],
     ['my-package', 'my-rule'],
     'should support `options.source`, `options.ruleId`'
+  )
+})
+
+test('VFileMessage.prototype', async function (t) {
+  await t.test(
+    'should define defaults on `VFileMessage.prototype`',
+    async function () {
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor(VFileMessage.prototype, 'stack'),
+        {configurable: true, enumerable: true, value: '', writable: true}
+      )
+    }
+  )
+
+  await t.test(
+    'should not call setters on `Error.prototype`',
+    async function () {
+      const code = [
+        'const sets = []',
+        'for (const key of ["message", "name", "stack"]) {',
+        '  Object.defineProperty(Error.prototype, key, {',
+        '    configurable: true,',
+        '    set() { sets.push(key) }',
+        '  })',
+        '}',
+        'const {VFileMessage} = await import("vfile-message")',
+        'new VFileMessage("")',
+        'console.log(JSON.stringify(sets))'
+      ].join('\n')
+      const {stdout} = await execFile(
+        process.execPath,
+        ['--conditions', 'development', '--input-type=module', '--eval', code],
+        {cwd: new URL('.', import.meta.url), encoding: 'utf8'}
+      )
+
+      assert.deepEqual(JSON.parse(stdout), [])
+    }
   )
 })
