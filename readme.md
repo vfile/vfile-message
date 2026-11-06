@@ -160,11 +160,11 @@ The following fields are documented and typed here.
   — specify the source value that’s being reported, which is deemed incorrect
 * `expected` (`Array<string>`, optional)
   — suggest acceptable values that can be used instead of `actual`
+* `note` (`string`, optional)
+  — long form description of the message (you should use markdown)
 * `url` (`string`, optional)
   — link to docs for the message (this must be an absolute URL that can be
   passed as `x` to `new URL(x)`)
-* `note` (`string`, optional)
-  — long form description of the message (you should use markdown)
 
 ## Compatibility
 
