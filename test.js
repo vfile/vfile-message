@@ -6,7 +6,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {VFileMessage} from 'vfile-message'
 
-/* eslint-disable no-undef */
+/* eslint-disable no-undef -- `variable` is undefined on purpose. */
 /** @type {Error} */
 let exception
 /** @type {Error} */
@@ -61,7 +61,7 @@ test('VFileMessage', async function () {
   assert.equal(m1.fatal, undefined)
   assert.equal(m1.line, undefined)
   assert.equal(m1.column, undefined)
-  assert.deepEqual(m1.place, undefined)
+  assert.equal(m1.place, undefined)
 
   assert.equal(
     String(m1),
@@ -78,7 +78,7 @@ test('VFileMessage', async function () {
   )
 
   assert.equal(
-    String(m2.stack || '').split('\n')[0],
+    String(m2.stack || '').split('\n', 1)[0],
     'ReferenceError: variable is not defined',
     'should accept an error (2)'
   )
@@ -88,7 +88,7 @@ test('VFileMessage', async function () {
   assert.equal(m3.message, 'foo', 'should accept a changed error (1)')
 
   assert.equal(
-    String(m3.stack || '').split('\n')[0],
+    String(m3.stack || '').split('\n', 1)[0],
     'ReferenceError: foo',
     'should accept a changed error (2)'
   )
