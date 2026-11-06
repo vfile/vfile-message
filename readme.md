@@ -145,7 +145,7 @@ Configuration (TypeScript type).
   — place of message
 * `ruleId` (`string`, optional, example: `'my-rule'`)
   — category of message
-* `source` (`string`, optional, , example: `'my-package'`)
+* `source` (`string`, optional, example: `'my-package'`)
   — namespace of who sent the message
 
 ### Well-known
