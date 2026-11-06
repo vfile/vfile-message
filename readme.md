@@ -43,12 +43,6 @@ install with [npm][npmjs-install]:
 npm install vfile-message
 ```
 
-In Deno with [`esm.sh`][esmsh]:
-
-```js
-import {VFileMessage} from 'https://esm.sh/vfile-message@4'
-```
-
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
@@ -177,15 +171,16 @@ The following fields are documented and typed here.
 Projects maintained by the unified collective are compatible with maintained
 versions of Node.js.
 
-When we cut a new major release, we drop support for unmaintained versions of
-Node.
-This means we try to keep the current release line, `vfile-message@^4`,
+When we cut a new major release,
+we drop support for unmaintained versions of Node.
+This means we try to keep the current release line,
+`vfile-message@4`,
 compatible with Node.js 16.
 
 ## Contribute
 
-See [`contributing.md`][health-contributing] in [`vfile/.github`][health]
-for ways to get started.
+See [`contributing.md`][health-contributing] in
+[`vfile/.github`][health] for ways to get started.
 See [`support.md`][health-support] for ways to get help.
 
 This project has a [code of conduct][health-coc].
