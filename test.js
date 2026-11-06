@@ -46,156 +46,153 @@ try {
 }
 /* eslint-enable no-undef */
 
-test('VFileMessage', async function () {
-  assert.deepEqual(
-    Object.keys(await import('vfile-message')).sort(),
-    ['VFileMessage'],
-    'should expose the public api'
-  )
+test('core', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('vfile-message')).sort(), [
+      'VFileMessage'
+    ])
+  })
+})
 
-  assert.ok(new VFileMessage('') instanceof Error, 'should return an Error')
-
-  const m1 = new VFileMessage('Foo')
-
-  assert.equal(m1.name, '1:1')
-  assert.equal(m1.file, '')
-  assert.equal(m1.reason, 'Foo')
-  assert.equal(m1.ruleId, undefined)
-  assert.equal(m1.source, undefined)
-  assert.equal(m1.stack, '')
-  assert.equal(m1.fatal, undefined)
-  assert.equal(m1.line, undefined)
-  assert.equal(m1.column, undefined)
-  assert.equal(m1.place, undefined)
-
-  assert.equal(
-    String(m1),
-    '1:1: Foo',
-    'should have a pretty `toString()` message'
-  )
-
-  const m2 = new VFileMessage(exception)
-
-  assert.equal(
-    m2.message,
-    'variable is not defined',
-    'should accept an error (1)'
-  )
-
-  assert.equal(
-    String(m2.stack || '').split('\n', 1)[0],
-    'ReferenceError: variable is not defined',
-    'should accept an error (2)'
-  )
-
-  const m3 = new VFileMessage(changedMessage)
-
-  assert.equal(m3.message, 'foo', 'should accept a changed error (1)')
-
-  assert.equal(
-    String(m3.stack || '').split('\n', 1)[0],
-    'ReferenceError: foo',
-    'should accept a changed error (2)'
-  )
-
-  const m4 = new VFileMessage(multilineException)
-
-  assert.equal(
-    m4.message,
-    'foo\nbar\nbaz',
-    'should accept a multiline error (1)'
-  )
-
-  assert.equal(
-    String(m4.stack || '')
-      .split('\n')
-      .slice(0, 3)
-      .join('\n'),
-    'ReferenceError: foo\nbar\nbaz',
-    'should accept a multiline error (2)'
-  )
-
-  const literalNode = {
-    type: 'x',
-    position: {
-      start: {line: 2, column: 3},
-      end: {line: 2, column: 5}
-    }
-  }
-
-  const m5 = new VFileMessage('test', literalNode)
-
-  assert.deepEqual(m5.place, literalNode.position, 'should accept a node (1)')
-  assert.equal(String(m5), '2:3-2:5: test', 'should accept a node (2)')
-  assert.equal(
-    String(new VFileMessage('test', {type: 'x'})),
-    '1:1: test',
-    'should accept a node (3)'
-  )
-
-  assert.equal(
-    String(
-      new VFileMessage(
-        'xxx',
-        /** @type {Root} */ ({
-          type: 'root',
-          children: [],
-          position: {
-            start: {line: 1, column: 1},
-            end: {line: 2, column: 1}
-          }
-        })
-      )
-    ),
-    '1:1-2:1: xxx',
-    'should accept a node (4, typed)'
-  )
-
-  const position = literalNode.position
-  const m6 = new VFileMessage('test', position)
-
-  assert.deepEqual(m6.place, position, 'should accept a position (1)')
-  assert.equal(String(m6), '2:3-2:5: test', 'should accept a position (2)')
-
-  const point = position.start
-  const m7 = new VFileMessage('test', point)
-
-  assert.deepEqual(m7.place, point, 'should accept a position (3)')
-
-  assert.equal(String(m7), '2:3: test', 'should accept a position (4)')
-
-  assert.equal(
-    new VFileMessage('test', 'charlie').ruleId,
-    'charlie',
-    'should accept a `ruleId` as `origin`'
-  )
-
-  const m8 = new VFileMessage('test', 'delta:echo')
-
-  assert.deepEqual(
-    [m8.source, m8.ruleId],
-    ['delta', 'echo'],
-    'should accept a `source` and `ruleId` in `origin`'
-  )
-
-  const m9 = new VFileMessage('Something went wrong', {
-    ancestors: [literalNode],
-    cause: exception,
-    place: literalNode.position,
-    ruleId: 'my-rule',
-    source: 'my-package'
+test('VFileMessage', async function (t) {
+  await t.test('should create an error', async function () {
+    assert.ok(new VFileMessage('') instanceof Error)
   })
 
-  assert.equal(m9.reason, 'Something went wrong', 'should support options')
-  assert.deepEqual(
-    [m9.line, m9.column],
-    [2, 3],
-    'should support `options.place` for `line`/`column`'
+  await t.test('should support a reason', async function () {
+    const message = new VFileMessage('Foo')
+
+    assert.equal(message.message, 'Foo')
+    assert.equal(message.reason, 'Foo')
+  })
+
+  await t.test('should set defaults', async function () {
+    const message = new VFileMessage('')
+
+    assert.equal(message.column, undefined)
+    assert.equal(message.fatal, undefined)
+    assert.equal(message.file, '')
+    assert.equal(message.line, undefined)
+    assert.equal(message.name, '1:1')
+    assert.equal(message.place, undefined)
+    assert.equal(message.ruleId, undefined)
+    assert.equal(message.source, undefined)
+    assert.equal(message.stack, '')
+  })
+
+  await t.test('should serialize w/ `toString()`', async function () {
+    assert.equal(String(new VFileMessage('Foo')), '1:1: Foo')
+  })
+
+  await t.test('should support an error', async function () {
+    const message = new VFileMessage(exception)
+
+    assert.equal(message.message, 'variable is not defined')
+    assert.equal(
+      String(message.stack).split('\n', 1)[0],
+      'ReferenceError: variable is not defined'
+    )
+  })
+
+  await t.test(
+    'should support an error w/ a changed message',
+    async function () {
+      const message = new VFileMessage(changedMessage)
+
+      assert.equal(message.message, 'foo')
+      assert.equal(
+        String(message.stack).split('\n', 1)[0],
+        'ReferenceError: foo'
+      )
+    }
   )
-  assert.deepEqual(
-    [m9.source, m9.ruleId],
-    ['my-package', 'my-rule'],
-    'should support `options.source`, `options.ruleId`'
+
+  await t.test(
+    'should support an error w/ a multiline message',
+    async function () {
+      const message = new VFileMessage(multilineException)
+
+      assert.equal(message.message, 'foo\nbar\nbaz')
+      assert.equal(
+        String(message.stack).split('\n').slice(0, 3).join('\n'),
+        'ReferenceError: foo\nbar\nbaz'
+      )
+    }
+  )
+
+  await t.test('should support a node', async function () {
+    const position = {start: {line: 2, column: 3}, end: {line: 2, column: 5}}
+    const message = new VFileMessage('test', {type: 'x', position})
+
+    assert.deepEqual(message.place, position)
+    assert.equal(String(message), '2:3-2:5: test')
+  })
+
+  await t.test('should support a node w/o position', async function () {
+    assert.equal(String(new VFileMessage('test', {type: 'x'})), '1:1: test')
+  })
+
+  await t.test('should support a typed node', async function () {
+    /** @type {Root} */
+    const node = {
+      type: 'root',
+      children: [],
+      position: {start: {line: 1, column: 1}, end: {line: 2, column: 1}}
+    }
+
+    assert.equal(String(new VFileMessage('test', node)), '1:1-2:1: test')
+  })
+
+  await t.test('should support a position', async function () {
+    const position = {start: {line: 2, column: 3}, end: {line: 2, column: 5}}
+    const message = new VFileMessage('test', position)
+
+    assert.deepEqual(message.place, position)
+    assert.equal(String(message), '2:3-2:5: test')
+  })
+
+  await t.test('should support a point', async function () {
+    const point = {line: 2, column: 3}
+    const message = new VFileMessage('test', point)
+
+    assert.deepEqual(message.place, point)
+    assert.equal(String(message), '2:3: test')
+  })
+
+  await t.test('should support a `ruleId` as `origin`', async function () {
+    assert.equal(new VFileMessage('test', 'charlie').ruleId, 'charlie')
+  })
+
+  await t.test(
+    'should support a `source` and `ruleId` as `origin`',
+    async function () {
+      const message = new VFileMessage('test', 'delta:echo')
+
+      assert.equal(message.source, 'delta')
+      assert.equal(message.ruleId, 'echo')
+    }
+  )
+
+  await t.test('should support `options.place`', async function () {
+    const message = new VFileMessage('test', {
+      place: {start: {line: 2, column: 3}, end: {line: 2, column: 5}}
+    })
+
+    assert.equal(message.line, 2)
+    assert.equal(message.column, 3)
+  })
+
+  await t.test(
+    'should support `options.ruleId`, `options.source`',
+    async function () {
+      const message = new VFileMessage('test', {
+        ruleId: 'my-rule',
+        source: 'my-package'
+      })
+
+      assert.equal(message.ruleId, 'my-rule')
+      assert.equal(message.source, 'my-package')
+    }
   )
 })
 
